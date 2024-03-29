@@ -11,6 +11,11 @@ import java.io.IOException;
 
 public interface UpsellService {
     Page<Upsell> getUpsells(Pageable pageable);
+    // Method to search Upsells by productId
+    Page<UpsellDto> searchUpsellsByProductId(Long productId, Pageable pageable);
+
+    // Method to search Upsells by packageId
+    Page<UpsellDto> searchUpsellsByPackageId(Long packageId, Pageable pageable);
 
     UpsellDto getUpsellById(Long id);
 

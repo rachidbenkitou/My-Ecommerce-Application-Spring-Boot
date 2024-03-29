@@ -84,6 +84,11 @@
             <artifactId>ecommerce-service</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>6.0.3</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>

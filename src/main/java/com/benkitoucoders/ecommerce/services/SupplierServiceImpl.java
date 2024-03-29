@@ -23,6 +23,17 @@ public class SupplierServiceImpl implements SupplierService {
     private final SupplierDao supplierDao;
     private final SupplierMapper supplierMapper;
 
+    /**
+     * Retrieves a list of suppliers based on the specified criteria.
+     *
+     * @param supplierId   The ID of the supplier to filter by.
+     * @param name         The name of the supplier to filter by.
+     * @param email        The email of the supplier to filter by.
+     * @param phoneNumber  The phone number of the supplier to filter by.
+     * @param pageable     Pagination information.
+     * @return             A list of SupplierDto objects representing the suppliers that match the criteria.
+     * @throws RuntimeException If an error occurs while retrieving suppliers.
+     */
     @Override
     public List<SupplierDto> getSuppliers(Long supplierId, String name, String email, String phoneNumber, Pageable pageable) {
         try {
@@ -35,6 +46,13 @@ public class SupplierServiceImpl implements SupplierService {
         }
     }
 
+    /**
+     * Retrieves a supplier by its ID.
+     *
+     * @param id The ID of the supplier to retrieve.
+     * @return   A SupplierDto object representing the supplier with the specified ID.
+     * @throws EntityNotFoundException If the supplier with the specified ID is not found.
+     */
     @Override
     public SupplierDto getSupplierById(Long id) {
         log.debug("Fetching supplier with id : {}",id);
@@ -48,7 +66,13 @@ public class SupplierServiceImpl implements SupplierService {
             return new EntityNotFoundException(String.format("the supplier with the id %d is not found",id));
         });
     }
-
+    /**
+     * Adds a new supplier.
+     *
+     * @param supplierDto The SupplierDto object representing the new supplier to add.
+     * @return            A SupplierDto object representing the added supplier.
+     * @throws IOException If an I/O error occurs while adding the supplier.
+     */
     @Override
     public SupplierDto addSupplier(SupplierDto supplierDto) throws IOException {
         try {
@@ -61,7 +85,13 @@ public class SupplierServiceImpl implements SupplierService {
             throw new RuntimeException("Error adding new supplier", e);
         }
     }
-
+    /**
+     * Updates an existing supplier.
+     *
+     * @param id          The ID of the supplier to update.
+     * @param supplierDto The SupplierDto object representing the updated supplier details.
+     * @return            A SupplierDto object representing the updated supplier.
+     */
     @Override
     public SupplierDto updateSupplier(Long id, SupplierDto supplierDto)
     {
@@ -80,7 +110,12 @@ public class SupplierServiceImpl implements SupplierService {
             throw new RuntimeException("Error updating supplier with id: " + id, e);
         }
     }
-
+    /**
+     * Deletes a supplier by its ID.
+     *
+     * @param id The ID of the supplier to delete.
+     * @return   A ResponseDto object indicating the result of the deletion operation.
+     */
     @Override
     public ResponseDto deleteSupplierById(Long id)
     {
