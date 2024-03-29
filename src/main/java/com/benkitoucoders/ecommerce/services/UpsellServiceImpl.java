@@ -27,14 +27,38 @@ public class UpsellServiceImpl implements UpsellService {
     private final UpsellDao upsellDao;
 
     private final UpsellMapper upsellMapper;
-
+    /**
+     * Retrieves a page of upsells.
+     *
+     * @param pageable Pagination information.
+     * @return A Page object containing a list of Upsell objects.
+     */
     @Override
     public Page<Upsell> getUpsells(Pageable pageable) {
         return upsellDao.findAll(pageable);
     }
 
+    @Override
+    public Page<UpsellDto> searchUpsellsByProductId(Long productId, Pageable pageable) {
+        log.info("Searching for upsells by productId: {}", productId);
+        return upsellDao.findByProductId(productId, pageable)
+                .map(upsellMapper::modelToDto);
+    }
 
+    @Override
+    public Page<UpsellDto> searchUpsellsByPackageId(Long packageId, Pageable pageable) {
+        log.info("Searching for upsells by packageId: {}", packageId);
+        return upsellDao.findByPackageId(packageId, pageable)
+                .map(upsellMapper::modelToDto);
+    }
 
+    /**
+     * Retrieves an upsell by its ID.
+     *
+     * @param id The ID of the upsell to retrieve.
+     * @return A UpsellDto object representing the upsell with the specified ID.
+     * @throws EntityNotFoundException If the upsell with the specified ID is not found.
+     */
     @Override
     public UpsellDto getUpsellById(Long id) {
         log.info("Fetching upsell getUpsellById with id: {} execution started.", id);
@@ -48,7 +72,13 @@ public class UpsellServiceImpl implements UpsellService {
                     return new EntityNotFoundException(String.format("The upsell with the id %d is not found.", id));
                 });
     }
-
+    /**
+     * Adds a new upsell.
+     *
+     * @param upsellDto The UpsellDto object representing the new upsell to add.
+     * @return A UpsellDto object representing the added upsell.
+     * @throws IOException If an I/O error occurs while adding the upsell.
+     */
     @Override
     public UpsellDto addUpsell(UpsellDto upsellDto) throws IOException {
         log.info("addUpsell: Adding new upsell execution started.");
@@ -64,7 +94,14 @@ public class UpsellServiceImpl implements UpsellService {
         }
     }
 
-
+    /**
+     * Updates an existing upsell.
+     *
+     * @param id The ID of the upsell to update.
+     * @param upsellDto The UpsellDto object representing the updated upsell details.
+     * @return A UpsellDto object representing the updated upsell.
+     * @throws EntityServiceException If an error occurs while updating the upsell.
+     */
     @Override
     public UpsellDto updateUpsell(Long id, UpsellDto upsellDto) {
 
@@ -82,7 +119,13 @@ public class UpsellServiceImpl implements UpsellService {
             throw new EntityServiceException("An error occurred while updating the upsell.", e);
         }
     }
-
+    /**
+     * Deletes an upsell by its ID.
+     *
+     * @param id The ID of the upsell to delete.
+     * @return A ResponseDto object indicating the result of the deletion operation.
+     * @throws EntityServiceException If an error occurs while deleting the upsell.
+     */
     @Override
     public ResponseDto deleteUpsellById(Long id) {
         log.info("Deleting upsell with id: {}", id);
