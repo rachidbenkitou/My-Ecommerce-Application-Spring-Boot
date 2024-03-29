@@ -1,5 +1,6 @@
 package com.benkitoucoders.ecommerce.controllers;
 
+import com.benkitoucoders.ecommerce.dtos.LoginResponseDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
@@ -52,7 +53,7 @@ public class KeycloakUsersProviderController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResponseDto> login(HttpServletRequest request) {
+    public ResponseEntity<LoginResponseDto> login(HttpServletRequest request) {
         String grantType = request.getParameter("grant_type");
         String clientId = request.getParameter("client_id");
         String username = request.getParameter("username");
@@ -63,7 +64,10 @@ public class KeycloakUsersProviderController {
     @PostMapping("/logout")
     public ResponseEntity<ResponseDto> logout(HttpServletRequest request) {
         String token = extractToken(request);
-        return ResponseEntity.ok(securityUsersProviderService.logout(token));
+        String clientId = request.getParameter("client_id");
+        String refreshToken = request.getParameter("refresh_token");
+
+        return ResponseEntity.ok(securityUsersProviderService.logout(token, clientId, refreshToken));
     }
 
     private String extractToken(HttpServletRequest request) {

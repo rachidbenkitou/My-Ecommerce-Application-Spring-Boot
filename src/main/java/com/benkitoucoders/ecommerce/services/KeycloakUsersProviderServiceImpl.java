@@ -2,6 +2,7 @@ package com.benkitoucoders.ecommerce.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.benkitoucoders.ecommerce.dtos.LoginResponseDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
@@ -29,7 +30,7 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     private String usersEndpoint;
     @Value("${myKeycloak.token-endpoint}")
     private String loginEndpoint;
-    @Value("${myKeycloak.logout-endpoint")
+    @Value("${myKeycloak.logout-endpoint}")
     private String logoutEndpoint;
 
     private final RestTemplate restTemplate;
@@ -116,59 +117,51 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
         }
     }
 
-    @Override
-    public ResponseDto login(String grantType, String clientId, String username, String password) {
-        // Set up the headers
+    // Common method to make HTTP requests
+    private ResponseEntity<Map<String, Object>> makeHttpRequest(String endpoint, HttpMethod method, MultiValueMap<String, String> requestBody) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-        // Set up the body with the values received from the controller
-        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
-        map.add("grant_type", grantType);
-        map.add("client_id", clientId);
-        map.add("username", username);
-        map.add("password", password);
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
 
-        // Create the HttpEntity with the headers and body
-        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
+        return restTemplate.exchange(endpoint, method, requestEntity, new ParameterizedTypeReference<Map<String, Object>>() {
+        });
+    }
 
-        // Make the POST request to the external service using exchange method
-        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
-                loginEndpoint,
-                HttpMethod.POST,
-                requestEntity,
-                new ParameterizedTypeReference<Map<String, Object>>() {
-                });
+    @Override
+    public LoginResponseDto login(String grantType, String clientId, String username, String password) {
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("grant_type", grantType);
+        requestBody.add("client_id", clientId);
+        requestBody.add("username", username);
+        requestBody.add("password", password);
 
-        // Check the response status code and handle accordingly
+        ResponseEntity<Map<String, Object>> response = makeHttpRequest(loginEndpoint, HttpMethod.POST, requestBody);
+
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             Map<String, Object> responseBody = response.getBody();
-            String accessToken = (String) responseBody.get("access_token");
-
-            // Check if the access token is present in the response
-            if (accessToken != null && !accessToken.isEmpty()) {
-                // Return the access token
-                return ResponseDto.builder()
-                        .message(accessToken)
-                        .build();
-            } else {
-                throw new RuntimeException("No access token found in the response body");
-            }
+            return LoginResponseDto.builder()
+                    .accessToken(responseBody.get("access_token") + "")
+                    .refreshToken(responseBody.get("refresh_token") + "")
+                    .build();
         } else {
             throw new RuntimeException("Failed to login to Keycloak, status code: " + response.getStatusCode());
         }
     }
 
-
     @Override
-    public ResponseDto logout(String token) {
-        ResponseEntity<Void> response = makeKeycloakRequest(logoutEndpoint, HttpMethod.POST, token, null, Void.class);
+    public ResponseDto logout(String token, String clientId, String refreshToken) {
+        MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
+        requestBody.add("refresh_token", refreshToken);
+        requestBody.add("client_id", clientId);
+
+        ResponseEntity<Map<String, Object>> response = makeHttpRequest(logoutEndpoint, HttpMethod.POST, requestBody);
 
         if (response.getStatusCode() != HttpStatus.NO_CONTENT) {
             throw new RuntimeException("Failed to logout from Keycloak");
         } else {
             return ResponseDto.builder()
-                    .message("Logout has been succefull!")
+                    .message("Logout has been successful!")
                     .build();
         }
     }

@@ -1,5 +1,6 @@
 package com.benkitoucoders.ecommerce.services.inter;
 
+import com.benkitoucoders.ecommerce.dtos.LoginResponseDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
 
@@ -16,7 +17,7 @@ public interface SecurityUsersProviderService {
 
     ResponseDto deleteUserById(String id, String token);
 
-    ResponseDto login(String grantType, String clientId, String username, String password);
+    LoginResponseDto login(String grantType, String clientId, String username, String password);
 
-    ResponseDto logout(String token);
+    ResponseDto logout(String token, String clientId, String refreshToken);
 }
