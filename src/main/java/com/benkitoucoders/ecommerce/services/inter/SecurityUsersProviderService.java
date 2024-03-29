@@ -15,4 +15,8 @@ public interface SecurityUsersProviderService {
     ResponseDto updateUser(SecurityUserDto user, String id, String token);
 
     ResponseDto deleteUserById(String id, String token);
+
+    ResponseDto login(String grantType, String clientId, String username, String password);
+
+    ResponseDto logout(String token);
 }

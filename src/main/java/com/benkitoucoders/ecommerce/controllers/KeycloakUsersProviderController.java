@@ -40,7 +40,7 @@ public class KeycloakUsersProviderController {
     public ResponseEntity<ResponseDto> updateUser(@PathVariable String id, @RequestBody SecurityUserDto user, HttpServletRequest request) {
         String token = extractToken(request);
         // Assuming the updateUser method returns the updated user
-        ResponseDto updatedUser = securityUsersProviderService.updateUser(user,id, token);
+        ResponseDto updatedUser = securityUsersProviderService.updateUser(user, id, token);
         return ResponseEntity.ok(updatedUser);
     }
 
@@ -49,6 +49,21 @@ public class KeycloakUsersProviderController {
         String token = extractToken(request);
         ResponseDto response = securityUsersProviderService.deleteUserById(id, token);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ResponseDto> login(HttpServletRequest request) {
+        String grantType = request.getParameter("grant_type");
+        String clientId = request.getParameter("client_id");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        return ResponseEntity.ok(securityUsersProviderService.login(grantType, clientId, username, password));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ResponseDto> logout(HttpServletRequest request) {
+        String token = extractToken(request);
+        return ResponseEntity.ok(securityUsersProviderService.logout(token));
     }
 
     private String extractToken(HttpServletRequest request) {

@@ -3,19 +3,23 @@ package com.benkitoucoders.ecommerce.services;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
+import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
-import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Transactional
 @Repository
@@ -24,7 +28,9 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     @Value("${myKeycloak.users-endpoint}")
     private String usersEndpoint;
     @Value("${myKeycloak.token-endpoint}")
-    private String tokenEndpoint;
+    private String loginEndpoint;
+    @Value("${myKeycloak.logout-endpoint")
+    private String logoutEndpoint;
 
     private final RestTemplate restTemplate;
 
@@ -109,6 +115,64 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
             throw new RuntimeException("Failed to delete user in Keycloak");
         }
     }
+
+    @Override
+    public ResponseDto login(String grantType, String clientId, String username, String password) {
+        // Set up the headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        // Set up the body with the values received from the controller
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
+        map.add("grant_type", grantType);
+        map.add("client_id", clientId);
+        map.add("username", username);
+        map.add("password", password);
+
+        // Create the HttpEntity with the headers and body
+        HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(map, headers);
+
+        // Make the POST request to the external service using exchange method
+        ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
+                loginEndpoint,
+                HttpMethod.POST,
+                requestEntity,
+                new ParameterizedTypeReference<Map<String, Object>>() {
+                });
+
+        // Check the response status code and handle accordingly
+        if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
+            Map<String, Object> responseBody = response.getBody();
+            String accessToken = (String) responseBody.get("access_token");
+
+            // Check if the access token is present in the response
+            if (accessToken != null && !accessToken.isEmpty()) {
+                // Return the access token
+                return ResponseDto.builder()
+                        .message(accessToken)
+                        .build();
+            } else {
+                throw new RuntimeException("No access token found in the response body");
+            }
+        } else {
+            throw new RuntimeException("Failed to login to Keycloak, status code: " + response.getStatusCode());
+        }
+    }
+
+
+    @Override
+    public ResponseDto logout(String token) {
+        ResponseEntity<Void> response = makeKeycloakRequest(logoutEndpoint, HttpMethod.POST, token, null, Void.class);
+
+        if (response.getStatusCode() != HttpStatus.NO_CONTENT) {
+            throw new RuntimeException("Failed to logout from Keycloak");
+        } else {
+            return ResponseDto.builder()
+                    .message("Logout has been succefull!")
+                    .build();
+        }
+    }
+
 
     private <T, R> ResponseEntity<T> makeKeycloakRequest(String url, HttpMethod method, String token, R body, Class<T> responseType) {
         HttpHeaders headers = new HttpHeaders();
