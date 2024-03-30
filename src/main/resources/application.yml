@@ -50,3 +50,7 @@ myKeycloak:
   token-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/token
   logout-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/logout
   roles-endpoint: http://localhost:8080/admin/realms/ecommerce-service-realm/roles
+
+  client:
+    default-role-id: 2a0e9424-ed1b-4ec6-8138-daec9c1e9735
+    default-role-name: client

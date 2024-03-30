@@ -12,6 +12,8 @@ public interface SecurityUsersProviderService {
 
     SecurityUserDto getUserByUsername(String username, String token);
 
+    SecurityUserDto getUserById(String id, String token);
+
     SecurityUserDto addUser(SecurityUserDto user, String token);
 
     ResponseDto updateUser(SecurityUserDto user, String id, String token);

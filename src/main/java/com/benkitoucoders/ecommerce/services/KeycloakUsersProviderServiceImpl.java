@@ -8,6 +8,7 @@ import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
 import com.benkitoucoders.ecommerce.entities.Role;
 import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.benkitoucoders.ecommerce.services.inter.SecurityRolesProviderService;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,6 +38,7 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     private String logoutEndpoint;
 
     private final RestTemplate restTemplate;
+    private final SecurityRolesProviderService securityRolesProviderService;
 
     @Override
     public List<SecurityUserDto> getAllUsers(String accessToken) {
@@ -67,23 +69,20 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
         }
     }
 
-    public SecurityUserDto getUserById(String name, String token) {
-        ResponseEntity<SecurityUserDto[]> response = makeKeycloakRequest(usersEndpoint + "?id=" + name, HttpMethod.GET, token, null, SecurityUserDto[].class);
+    @Override
+    public SecurityUserDto getUserById(String id, String token) {
+        ResponseEntity<SecurityUserDto[]> response = makeKeycloakRequest(usersEndpoint + "?id=" + id, HttpMethod.GET, token, null, SecurityUserDto[].class);
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody().length > 0) {
             return response.getBody()[0];
         } else {
-            throw new EntityNotFoundException("User not found: " + name);
+            throw new EntityNotFoundException("User not found: " + id);
         }
     }
 
     @Override
     public SecurityUserDto addUser(SecurityUserDto user, String token) {
-        String username = extractPreferredUsername(token);
-        SecurityUserDto existingUser = getUserByUsernameWithoutException(username, token);
-        if (existingUser != null) {
-            // If we found a user, then the user already exists
-            throw new EntityAlreadyExistsException("User already exists with username: " + username);
-        }
+
+        isUserExistsByUsername(token);
         ResponseEntity<SecurityUserDto> response = makeKeycloakRequest(usersEndpoint, HttpMethod.POST, token, user, SecurityUserDto.class);
         if (response.getStatusCode() == HttpStatus.CREATED) {
             return getUserByUsername(user.getUsername(), token);
@@ -110,6 +109,7 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
 
     @Override
     public ResponseDto deleteUserById(String id, String token) {
+        isUserExistsByUsername(token);
         ResponseEntity<Void> response = makeKeycloakRequest(usersEndpoint + "/" + id, HttpMethod.DELETE, token, null, Void.class);
         if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
             return ResponseDto.builder()
@@ -173,6 +173,11 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     public ResponseDto assignRoleToUser(String userId, List<Role> roles, String token) {
         String url = usersEndpoint + "/" + userId + "/role-mappings/realm";
 
+        // Those two line are used to verify if user and roles exist, else exception will be thrown
+        getUserById(userId, token);
+        for (Role role : roles) {
+            securityRolesProviderService.getRoleByName(role.getName(), token);
+        }
         // Convert roles to JSON array
         ObjectMapper objectMapper = new ObjectMapper();
         String rolesJson;
@@ -204,6 +209,16 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
         return restTemplate.exchange(url, method, entity, responseType);
     }
 
+
+    //Helper Method that verifies if user exits with username
+    private void isUserExistsByUsername(String token) {
+        String username = extractPreferredUsername(token);
+        SecurityUserDto existingUser = getUserByUsernameWithoutException(username, token);
+        if (existingUser != null) {
+            // If we found a user, then the user already exists
+            throw new EntityAlreadyExistsException("User already exists with username: " + username);
+        }
+    }
 
     private String extractPreferredUsername(String token) {
         if (token != null && token.startsWith("Bearer ")) {

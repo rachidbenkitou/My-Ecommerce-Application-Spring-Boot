@@ -33,6 +33,12 @@ public class KeycloakUsersProviderController {
         return securityUsersProviderService.getUserByUsername(username, token);
     }
 
+    @GetMapping("/{id}")
+    public SecurityUserDto getUserById(@PathVariable String id, HttpServletRequest request) {
+        String token = extractToken(request);
+        return securityUsersProviderService.getUserById(id, token);
+    }
+
     @PostMapping
     public ResponseEntity<?> addUser(@RequestBody SecurityUserDto user, HttpServletRequest request) {
         String token = extractToken(request);
@@ -79,14 +85,4 @@ public class KeycloakUsersProviderController {
         ResponseDto response = securityUsersProviderService.assignRoleToUser(userId, roles, token);
         return ResponseEntity.ok(response);
     }
-
-//    private String extractToken(HttpServletRequest request) {
-//        String authorizationHeader = request.getHeader("Authorization");
-//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-//            return authorizationHeader.substring(7);
-//        }
-//        throw new RuntimeException("No OAuth token found in the request");
-//    }
-
-
 }
