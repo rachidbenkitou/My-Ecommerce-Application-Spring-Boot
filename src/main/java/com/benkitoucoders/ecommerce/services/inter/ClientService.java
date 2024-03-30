@@ -11,9 +11,9 @@ public interface ClientService {
 
     ClientDto getClientById(Long id);
 
-    ClientDto addClient(ClientDto clientDto) throws IOException;
+    ClientDto addClient(ClientDto clientDto, String token) throws IOException;
 
     ClientDto updateClient(Long id, ClientDto clientDto);
 
-    ResponseDto deleteClientById(Long id);
+    ResponseDto deleteClientById(Long id, String token);
 }

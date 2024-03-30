@@ -3,6 +3,7 @@ package com.benkitoucoders.ecommerce.controllers;
 import com.benkitoucoders.ecommerce.dtos.LoginResponseDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
+import com.benkitoucoders.ecommerce.entities.Role;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static com.benkitoucoders.ecommerce.utils.TokenManagement.extractToken;
 
 @RestController
 @RequiredArgsConstructor
@@ -70,13 +73,20 @@ public class KeycloakUsersProviderController {
         return ResponseEntity.ok(securityUsersProviderService.logout(token, clientId, refreshToken));
     }
 
-    private String extractToken(HttpServletRequest request) {
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            return authorizationHeader.substring(7);
-        }
-        throw new RuntimeException("No OAuth token found in the request");
+    @PostMapping("/{userId}/roles")
+    public ResponseEntity<ResponseDto> assignRoleToUser(@PathVariable String userId, @RequestBody List<Role> roles, HttpServletRequest request) {
+        String token = extractToken(request);
+        ResponseDto response = securityUsersProviderService.assignRoleToUser(userId, roles, token);
+        return ResponseEntity.ok(response);
     }
+
+//    private String extractToken(HttpServletRequest request) {
+//        String authorizationHeader = request.getHeader("Authorization");
+//        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+//            return authorizationHeader.substring(7);
+//        }
+//        throw new RuntimeException("No OAuth token found in the request");
+//    }
 
 
 }

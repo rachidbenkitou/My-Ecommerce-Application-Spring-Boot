@@ -5,14 +5,17 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.benkitoucoders.ecommerce.dtos.LoginResponseDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
+import com.benkitoucoders.ecommerce.entities.Role;
 import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -23,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 @Transactional
-@Repository
+@Service
 @RequiredArgsConstructor
 public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderService {
     @Value("${myKeycloak.users-endpoint}")
@@ -64,12 +67,12 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
         }
     }
 
-    public SecurityUserDto getUserById(String id, String token) {
-        ResponseEntity<SecurityUserDto[]> response = makeKeycloakRequest(usersEndpoint + "?id=" + id, HttpMethod.GET, token, null, SecurityUserDto[].class);
+    public SecurityUserDto getUserById(String name, String token) {
+        ResponseEntity<SecurityUserDto[]> response = makeKeycloakRequest(usersEndpoint + "?id=" + name, HttpMethod.GET, token, null, SecurityUserDto[].class);
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null && response.getBody().length > 0) {
             return response.getBody()[0];
         } else {
-            throw new EntityNotFoundException("User not found: " + id);
+            throw new EntityNotFoundException("User not found: " + name);
         }
     }
 
@@ -163,6 +166,31 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
             return ResponseDto.builder()
                     .message("Logout has been successful!")
                     .build();
+        }
+    }
+
+    @Override
+    public ResponseDto assignRoleToUser(String userId, List<Role> roles, String token) {
+        String url = usersEndpoint + "/" + userId + "/role-mappings/realm";
+
+        // Convert roles to JSON array
+        ObjectMapper objectMapper = new ObjectMapper();
+        String rolesJson;
+        try {
+            rolesJson = objectMapper.writeValueAsString(roles);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to convert roles to JSON: " + e.getMessage());
+        }
+
+        // Make HTTP request to assign roles to user
+        ResponseEntity<Void> response = makeKeycloakRequest(url, HttpMethod.POST, token, rolesJson, Void.class);
+
+        if (response.getStatusCode() == HttpStatus.NO_CONTENT) {
+            return ResponseDto.builder()
+                    .message("Roles assigned to user successfully.")
+                    .build();
+        } else {
+            throw new RuntimeException("Failed to assign roles to user in Keycloak");
         }
     }
 

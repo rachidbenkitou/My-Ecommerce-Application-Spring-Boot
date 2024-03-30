@@ -1,5 +1,6 @@
 package com.benkitoucoders.ecommerce.dtos;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class ClientDto implements Serializable {
     private String firstName;
     private String lastName;
     private String address;
+    @JsonProperty("username")
     private String email;
     private String phoneNumber;
     private Long statusId;

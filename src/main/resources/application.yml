@@ -49,3 +49,4 @@ myKeycloak:
   users-endpoint: http://localhost:8080/admin/realms/ecommerce-service-realm/users
   token-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/token
   logout-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/logout
+  roles-endpoint: http://localhost:8080/admin/realms/ecommerce-service-realm/roles

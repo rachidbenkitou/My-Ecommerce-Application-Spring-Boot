@@ -1,13 +1,16 @@
 package com.benkitoucoders.ecommerce.controllers;
 
-import com.benkitoucoders.ecommerce.services.inter.ClientService;
 import com.benkitoucoders.ecommerce.dtos.ClientDto;
+import com.benkitoucoders.ecommerce.services.inter.ClientService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
+
+import static com.benkitoucoders.ecommerce.utils.TokenManagement.extractToken;
 
 @RestController
 @RequestMapping("/clients")
@@ -35,8 +38,10 @@ public class ClientController {
 
     @PostMapping
     public ResponseEntity<ClientDto> addClient(
+            HttpServletRequest request,
             @RequestBody ClientDto clientDto) throws IOException {
-        return ResponseEntity.ok().body(clientService.addClient(clientDto));
+        String token = extractToken(request);
+        return ResponseEntity.ok().body(clientService.addClient(clientDto, token));
     }
 
 
@@ -47,7 +52,9 @@ public class ClientController {
     }
 
     @DeleteMapping("/{clientId}")
-    public ResponseEntity<?> deleteClientById(@PathVariable Long clientId) {
-        return ResponseEntity.ok().body(clientService.deleteClientById(clientId));
+    public ResponseEntity<?> deleteClientById(@PathVariable Long clientId, HttpServletRequest request
+    ) {
+        String token = extractToken(request);
+        return ResponseEntity.ok().body(clientService.deleteClientById(clientId, token));
     }
 }

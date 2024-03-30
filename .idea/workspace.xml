@@ -5,11 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b4b1d01-80c9-4cea-be4d-8a2985e91621" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/LoginResponseDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/KeycloakRolesProviderController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/Role.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/KeycloakRolesProviderServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/SecurityRolesProviderService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/utils/TokenManagement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/ClientController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/ClientController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/KeycloakUsersProviderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/KeycloakUsersProviderController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/ClientDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/ClientDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/SecurityUserDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/SecurityUserDto.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/Client.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/Client.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/ClientServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/ClientServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/KeycloakUsersProviderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/KeycloakUsersProviderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/ClientService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/ClientService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/SecurityUsersProviderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/SecurityUsersProviderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +30,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
       </list>
     </option>
@@ -49,6 +61,7 @@
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
@@ -71,7 +84,8 @@
       <option name="presentableId" value="Default" />
       <updated>1711729899388</updated>
       <workItem from="1711729900425" duration="488000" />
-      <workItem from="1711751166259" duration="4246000" />
+      <workItem from="1711751166259" duration="4378000" />
+      <workItem from="1711760054921" duration="6070000" />
     </task>
     <servers />
   </component>

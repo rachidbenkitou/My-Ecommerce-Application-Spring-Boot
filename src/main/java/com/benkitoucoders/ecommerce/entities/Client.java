@@ -1,5 +1,6 @@
 package com.benkitoucoders.ecommerce.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +24,7 @@ public class Client implements Serializable {
     private String firstName;
     private String lastName;
     private String address;
+    @JsonProperty("username")
     private String email;
     private String phoneNumber;
     @Column(name = "STATUS_ID")
