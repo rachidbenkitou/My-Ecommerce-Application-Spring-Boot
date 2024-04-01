@@ -1,5 +1,6 @@
 package com.benkitoucoders.ecommerce.entities;
 
+import com.benkitoucoders.ecommerce.entities.quiz.QuizSubCategory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @NoArgsConstructor
@@ -34,4 +37,9 @@ public class Client implements Serializable {
     @ManyToOne
     @JoinColumn(name = "STATUS_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     private ClientStatus clientStatus;
+
+    @ManyToMany(mappedBy = "clients")
+    private Set<QuizSubCategory> quizSubCategories = new HashSet<>();
+
+
 }

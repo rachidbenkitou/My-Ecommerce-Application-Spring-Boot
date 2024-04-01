@@ -24,9 +24,9 @@ public class SecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "*/login").permitAll()
-                .anyRequest()
-                .authenticated();
+                //.requestMatchers(HttpMethod.POST, "*/login").permitAll()
+                .anyRequest().permitAll();
+                //.authenticated();
 
         http
                 .oauth2ResourceServer()

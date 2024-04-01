@@ -26,7 +26,7 @@ public class ProductController {
 
 
     @GetMapping
-    @PreAuthorize("hasRole('client_admin')")
+    //@PreAuthorize("hasRole('client_admin')")
     public ResponseEntity<List<ProductDto>> getProductsByQuery(@RequestParam(name = "productId", required = false) Long id,
                                                                @RequestParam(name = "productName", required = false) String name,
                                                                @RequestParam(name = "productPrice", required = false) Double price,
