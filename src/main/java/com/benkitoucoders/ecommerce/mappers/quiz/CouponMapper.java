@@ -11,11 +11,9 @@ import java.util.List;
 @Mapper(componentModel = "spring", builder = @Builder(disableBuilder = true))
 @Component
 public interface CouponMapper {
-    CouponDto modelToDto(Coupon coupon);
+    CouponDto modelToDto(Coupon source);
 
-    List<CouponDto> modelsToDtos(List<Coupon> couponList);
+    List<CouponDto> modelsToDtos(List<Coupon> sourceList);
 
     Coupon dtoToModel(CouponDto couponDto);
-
-
 }

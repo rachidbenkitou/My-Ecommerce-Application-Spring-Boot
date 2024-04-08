@@ -1,6 +1,8 @@
-package com.benkitoucoders.ecommerce.entities;
+package com.benkitoucoders.ecommerce.entities.quiz;
 
 
+import com.benkitoucoders.ecommerce.entities.Package;
+import com.benkitoucoders.ecommerce.entities.Product;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.NotFound;
