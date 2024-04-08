@@ -1,13 +1,13 @@
 package com.benkitoucoders.ecommerce.services.strategy.quiz;
-import com.benkitoucoders.ecommerce.dao.quiz.CouponDao;
-import com.benkitoucoders.ecommerce.dtos.quiz.CouponDto;
-import com.benkitoucoders.ecommerce.entities.quiz.Coupon;
+import com.benkitoucoders.ecommerce.quiz.dao.CouponDao;
+import com.benkitoucoders.ecommerce.quiz.dto.CouponDto;
+import com.benkitoucoders.ecommerce.quiz.entity.Coupon;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
-import com.benkitoucoders.ecommerce.mappers.quiz.CouponMapper;
+import com.benkitoucoders.ecommerce.quiz.mappers.CouponMapper;
 import com.benkitoucoders.ecommerce.services.ProductServiceImpl;
 import com.benkitoucoders.ecommerce.criteria.DiscountCouponCriteria;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
-import com.benkitoucoders.ecommerce.services.inter.quiz.CouponService;
+import com.benkitoucoders.ecommerce.quiz.services.CouponService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

@@ -1,6 +1,6 @@
 package com.benkitoucoders.ecommerce.entities;
 
-import com.benkitoucoders.ecommerce.entities.quiz.QuizSubCategory;
+import com.benkitoucoders.ecommerce.quiz.entity.QuizSubCategory;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
