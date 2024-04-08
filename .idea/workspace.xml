@@ -5,22 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b4b1d01-80c9-4cea-be4d-8a2985e91621" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/quiz/CouponController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/strategy/quiz/CouponServiceImp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/DiscountCouponController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/DiscountCouponRepository.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/quiz/CouponDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/quiz/CouponDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/DiscountCouponDto.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/quiz/CouponDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dtos/quiz/CouponDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/DiscountCoupon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/quiz/DiscountCoupon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/DiscountCouponType.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/quiz/DiscountCouponType.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/quiz/Coupon.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/entities/quiz/Coupon.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/mappers/DiscountCouponMapper.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/mappers/quiz/CouponMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/mappers/quiz/CouponMapper.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/DiscountCouponServiceImpl.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/DiscountCoupanService.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/quiz/CouponService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/quiz/CouponService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,7 +43,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "Spring Boot.EcommerceServiceApplication.executor": "Run",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "othmaneDev",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/PC/Desktop/Projects/1-Ecommerce/ecommerce-service",
     "node.js.detected.package.eslint": "true",
