@@ -28,7 +28,7 @@ public class SupplierServiceImpl implements SupplierService {
      *
      * @param supplierId   The ID of the supplier to filter by.
      * @param name         The name of the supplier to filter by.
-     * @param email        The email of the supplier to filter by.
+     * @param email        The emailservice of the supplier to filter by.
      * @param phoneNumber  The phone number of the supplier to filter by.
      * @param pageable     Pagination information.
      * @return             A list of SupplierDto objects representing the suppliers that match the criteria.

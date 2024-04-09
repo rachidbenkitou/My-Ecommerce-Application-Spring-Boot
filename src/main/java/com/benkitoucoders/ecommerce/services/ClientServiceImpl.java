@@ -49,7 +49,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public ClientDto addClient(ClientDto clientDto, String token) throws IOException {
         if (clientDao.existsByEmailAndPhoneNumber(clientDto.getEmail(), clientDto.getPhoneNumber())) {
-            throw new EntityAlreadyExistsException(String.format("The client with the email %s and phone number is already exists", clientDto.getEmail(), clientDto.getPhoneNumber()));
+            throw new EntityAlreadyExistsException(String.format("The client with the emailservice %s and phone number is already exists", clientDto.getEmail(), clientDto.getPhoneNumber()));
         }
         clientDto.setId(null);
         // Save client in database
@@ -88,7 +88,7 @@ public class ClientServiceImpl implements ClientService {
     // Helper method to create a user in Keycloak
     private SecurityUserDto createKeycloakUser(ClientDto clientDto, String token) {
         SecurityUserDto user = new SecurityUserDto();
-        user.setUsername(clientDto.getEmail()); // Use email as username
+        user.setUsername(clientDto.getEmail()); // Use emailservice as username
         user.setFirstName(clientDto.getFirstName());
         user.setLastName(clientDto.getLastName());
         user.setEnabled(true); // Enable user by default

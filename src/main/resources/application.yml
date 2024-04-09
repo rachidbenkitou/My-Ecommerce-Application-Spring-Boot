@@ -10,13 +10,13 @@ cloud:
 
 application:
   bucket:
-    name: ecommerce-file
+    name: ecommerceservice-file
 
 
 jwt:
   auth:
     converter:
-      resource-id: ecommerce-service-client
+      resource-id: ecommerceservice-service-client
       principle-attribute: preferred_username
 
 spring:
@@ -26,6 +26,20 @@ spring:
         jwt:
           issuer-uri: http://localhost:8080/realms/ecommerce-service-realm
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
+
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: rachidbenkitou2021@gmail.com
+    password: kxmd uimm jntc qxqq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
 
   servlet:
     multipart:
@@ -45,6 +59,8 @@ server:
     context-path: /api
   port: 9090
 
+
+# My Custom Params
 myKeycloak:
   users-endpoint: http://localhost:8080/admin/realms/ecommerce-service-realm/users
   token-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/token
