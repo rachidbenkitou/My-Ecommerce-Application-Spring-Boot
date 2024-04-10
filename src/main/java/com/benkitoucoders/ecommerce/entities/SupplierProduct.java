@@ -5,10 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
@@ -26,6 +29,10 @@ public class SupplierProduct implements Serializable {
     private Long supplierId;
     private Double price;
     private Integer quantity;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime modifiedAat;
 
     @ManyToOne
     @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID", insertable = false, updatable = false)

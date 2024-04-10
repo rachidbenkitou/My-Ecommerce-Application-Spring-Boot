@@ -1,11 +1,11 @@
-package com.benkitoucoders.ecommerce.pdfgenerationservice;
+package com.benkitoucoders.ecommerce.services.pdfs;
 
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDetailsDto;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
 import com.benkitoucoders.ecommerce.dtos.SaleDetailsDto;
 import com.benkitoucoders.ecommerce.dtos.SaleDto;
-import com.benkitoucoders.ecommerce.emailservice.dtos.EmailDetails;
-import com.benkitoucoders.ecommerce.emailservice.services.EmailService;
+import com.benkitoucoders.ecommerce.dtos.EmailDetails;
+import com.benkitoucoders.ecommerce.services.inter.EmailService;
 import com.benkitoucoders.ecommerce.services.inter.ClientOrderDetailsService;
 import com.benkitoucoders.ecommerce.services.inter.SaleDetailsService;
 import com.benkitoucoders.ecommerce.services.inter.SaleService;

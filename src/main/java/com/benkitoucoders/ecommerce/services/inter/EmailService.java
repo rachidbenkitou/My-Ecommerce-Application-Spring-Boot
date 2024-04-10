@@ -1,6 +1,6 @@
-package com.benkitoucoders.ecommerce.emailservice.services;
+package com.benkitoucoders.ecommerce.services.inter;
 
-import com.benkitoucoders.ecommerce.emailservice.dtos.EmailDetails;
+import com.benkitoucoders.ecommerce.dtos.EmailDetails;
 
 public interface EmailService {
     void sendEmailAlert(EmailDetails emailDetails);

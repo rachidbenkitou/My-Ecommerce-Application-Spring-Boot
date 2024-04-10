@@ -1,4 +1,4 @@
-package com.benkitoucoders.ecommerce.emailservice.dtos;
+package com.benkitoucoders.ecommerce.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

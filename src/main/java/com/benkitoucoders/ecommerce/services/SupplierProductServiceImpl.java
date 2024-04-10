@@ -1,10 +1,12 @@
 package com.benkitoucoders.ecommerce.services;
 
 import com.benkitoucoders.ecommerce.dao.SupplierProductDao;
+import com.benkitoucoders.ecommerce.dtos.ProductDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SupplierProductDto;
 import com.benkitoucoders.ecommerce.entities.SupplierProduct;
 import com.benkitoucoders.ecommerce.mappers.SupplierProductMapper;
+import com.benkitoucoders.ecommerce.services.inter.ProductService;
 import com.benkitoucoders.ecommerce.services.inter.SupplierProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,7 @@ public class SupplierProductServiceImpl implements SupplierProductService {
 
     private final SupplierProductDao supplierProductDao;
     private final SupplierProductMapper supplierProductMapper;
+    private final ProductService productService;
 
     /**
      * Retrieves all supplier products.
@@ -71,11 +74,25 @@ public class SupplierProductServiceImpl implements SupplierProductService {
      */
     @Override
     public SupplierProductDto addSupplierProduct(SupplierProductDto supplierProductDto) throws IOException {
-        log.info("adding new supplier product");
+        log.info("Adding new supplier product");
+
+        // Convert DTO to model and save supplier product
         SupplierProduct supplierProduct = supplierProductMapper.dtoToModel(supplierProductDto);
         SupplierProduct savedSupplierProduct = supplierProductDao.save(supplierProduct);
+        log.info("Supplier product added: {}", savedSupplierProduct);
+
+        // Fetch product information
+        ProductDto productDto = productService.getProductById(supplierProductDto.getProductId());
+
+        // Update product quantity
+        int newQuantity = productDto.getQuantity() + supplierProductDto.getQuantity();
+        productDto.setQuantity(newQuantity);
+        productService.updateProduct(productDto.getId(), productDto);
+        log.info("Product quantity updated for product ID {}: New Quantity = {}", productDto.getId(), newQuantity);
+
         return supplierProductMapper.modelToDto(savedSupplierProduct);
     }
+
 
     /**
      * Updates an existing supplier product.

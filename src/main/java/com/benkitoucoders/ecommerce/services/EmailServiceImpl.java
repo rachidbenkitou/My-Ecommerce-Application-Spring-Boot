@@ -1,7 +1,7 @@
-package com.benkitoucoders.ecommerce.emailservice.services.impl;
+package com.benkitoucoders.ecommerce.services;
 
-import com.benkitoucoders.ecommerce.emailservice.dtos.EmailDetails;
-import com.benkitoucoders.ecommerce.emailservice.services.EmailService;
+import com.benkitoucoders.ecommerce.dtos.EmailDetails;
+import com.benkitoucoders.ecommerce.services.inter.EmailService;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

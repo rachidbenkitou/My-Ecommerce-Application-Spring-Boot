@@ -5,7 +5,7 @@ import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.exceptions.EntityServiceException;
 import com.benkitoucoders.ecommerce.services.inter.ImageService;
-import com.benkitoucoders.ecommerce.services.inter.ProuctService;
+import com.benkitoucoders.ecommerce.services.inter.ProductService;
 import com.benkitoucoders.ecommerce.services.strategy.inter.ImagesUploadStrategy;
 import com.benkitoucoders.ecommerce.dao.ImageDao;
 import com.benkitoucoders.ecommerce.dao.ProductDao;
@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProductServiceImpl implements ProuctService {
+public class ProductServiceImpl implements ProductService {
 
     private final ProductDao productDao;
     private final ProductMapper productMapper;

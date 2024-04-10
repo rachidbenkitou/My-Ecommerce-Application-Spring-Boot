@@ -1,10 +1,13 @@
 package com.benkitoucoders.ecommerce.dtos;
 
+import com.benkitoucoders.ecommerce.entities.ClientOrderDetails;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +25,7 @@ public class ClientOrderDto implements Serializable {
     private Long clientOrderStatusId;
     private String clientOrderStatusName;
     private String clientOrderStatusColor;
-
+    private List<ClientOrderDetailsDto> clientOrderDetailsDtos = new ArrayList<>();
 
     public ClientOrderDto(Long id, Double totalPrice, Long clientId, String clientFirstName, String clientLastName,
                           String clientEmail, String clientPhoneNumber, String description,

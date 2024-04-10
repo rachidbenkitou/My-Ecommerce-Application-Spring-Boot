@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import java.io.IOException;
 import java.util.List;
 
-public interface ProuctService {
+public interface ProductService {
 
     /**
      * Retrieves a list of products based on the provided search criteria.

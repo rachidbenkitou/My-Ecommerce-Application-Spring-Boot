@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -15,4 +16,6 @@ public class SupplierProductDto implements Serializable {
     private Long supplierId;
     private Double price;
     private Integer quantity;
+    private LocalDateTime createdAt;
+    private LocalDateTime modifiedAat;
 }
