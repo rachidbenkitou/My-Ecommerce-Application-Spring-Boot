@@ -14,9 +14,10 @@ import java.util.List;
 @Repository
 public interface SaleDetailsDao extends JpaRepository<SaleDetails, Long>, JpaSpecificationExecutor<SaleDetails> {
     @Query(value = "select new com.benkitoucoders.ecommerce.dtos.SaleDetailsDto(" +
-            " saleDetails.id, saleDetails.productId, saleDetails.productQuantity, saleDetails.saleId, " +
+            " saleDetails.id, saleDetails.productId,product.name, saleDetails.quantity,saleDetails.price, saleDetails.saleId, " +
             "saleDetails.dateCreation, saleDetails.dateUpdate)" +
             " FROM SaleDetails saleDetails " +
+            " INNER JOIN Product product on product.id=saleDetails.productId" +
             " WHERE (:id IS NULL OR saleDetails.id = :id)" +
             "AND (:saleId IS NULL OR saleDetails.saleId = :saleId) ")
     List<SaleDetailsDto> getSaleDetailsByQuery(

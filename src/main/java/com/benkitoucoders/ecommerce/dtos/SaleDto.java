@@ -17,6 +17,7 @@ public class SaleDto {
     private LocalDateTime dateCreation;
     private LocalDateTime dateUpdate;
     private String address;
+    private String fullName;
     private String phone;
     private String email;
     private Double totalPrice;

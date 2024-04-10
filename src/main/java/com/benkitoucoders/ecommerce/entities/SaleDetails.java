@@ -1,7 +1,10 @@
 package com.benkitoucoders.ecommerce.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -25,22 +28,22 @@ public class SaleDetails {
     private Long packageId;
     @Column(name = "package_quantity")
     private Long packageQuantity;
-    @Column(name = "product_quantity")
-    private Long productQuantity;
+    private Double price;
+    private Integer quantity;
     private LocalDateTime dateCreation;
     private LocalDateTime dateUpdate;
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "ID", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
-    private Product  product;
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "sale_id", referencedColumnName = "ID", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
-    private Sale  sale;
+    private Sale sale;
 
     @ManyToOne
     @JoinColumn(name = "package_id", referencedColumnName = "ID", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
-    private Package  pPackage;
+    private Package pPackage;
 }

@@ -23,6 +23,7 @@ public class Sale {
     private String address;
     private String phone;
     private String email;
+    private String fullName;
     private String saleStatus;
     private LocalDateTime dateCreation;
     private LocalDateTime dateUpdate;

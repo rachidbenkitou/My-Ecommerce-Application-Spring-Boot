@@ -117,7 +117,7 @@ public class ClientOrderServiceImpl implements ClientOrderService {
             ClientOrder clientOrder = retrieveClientOrderById(clientOrderId);
             clientOrder.setClientOrderStatusId(OrderStatusIds.ACCEPTED);
             ClientOrderDto clientOrderDto = clientOrderMapper.modelToDto(clientOrderDao.save(clientOrder));
-            deliveredOrderStatement.generateDeliveredOrderStatement(clientOrderId, clientOrderDto, true);
+            deliveredOrderStatement.generateDeliveredOrderStatement(clientOrderId, clientOrderDto,null, true);
             return clientOrderDto;
 
         } catch (Exception e) {
