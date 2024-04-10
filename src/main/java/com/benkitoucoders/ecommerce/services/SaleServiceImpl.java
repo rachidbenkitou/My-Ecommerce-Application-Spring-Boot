@@ -1,13 +1,14 @@
 package com.benkitoucoders.ecommerce.services;
 
-import com.benkitoucoders.ecommerce.dtos.ResponseDto;
-import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
-import com.benkitoucoders.ecommerce.services.inter.SaleService;
 import com.benkitoucoders.ecommerce.criteria.SaleCriteria;
 import com.benkitoucoders.ecommerce.dao.SaleDao;
+import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.dtos.SaleDto;
 import com.benkitoucoders.ecommerce.entities.Sale;
+import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.mappers.SaleMapper;
+import com.benkitoucoders.ecommerce.services.inter.SaleService;
+import com.benkitoucoders.ecommerce.services.pdfs.DeliveredOrderStatement;
 import com.benkitoucoders.ecommerce.utils.OrderStatusIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class SaleServiceImpl implements SaleService {
 
     private final SaleMapper saleMapper;
     private final ProductServiceImpl productService;
+    private final DeliveredOrderStatement deliveredOrderStatement;
 
     public List<SaleDto> findsalesByCriteria(SaleCriteria saleCriteria) throws EntityNotFoundException {
         return saleDao.getSalesByQuery(saleCriteria.getId(), saleCriteria.getSaleStatusId());
@@ -77,7 +79,12 @@ public class SaleServiceImpl implements SaleService {
         try {
             Sale sale = retrieveSaleById(saleId);
             sale.setSaleStatusId(OrderStatusIds.ACCEPTED);
-            return saleMapper.modelToDto(saleDao.save(sale));
+
+
+            SaleDto saleDto = saleMapper.modelToDto(saleDao.save(sale));
+            deliveredOrderStatement.generateDeliveredOrderStatement(saleId, null, saleDto, false);
+
+            return saleDto;
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while modifying sale status to accepted.", e);
 

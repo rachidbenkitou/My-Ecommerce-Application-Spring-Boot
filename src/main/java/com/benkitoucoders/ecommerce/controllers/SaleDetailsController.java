@@ -30,6 +30,16 @@ public class SaleDetailsController {
         return ResponseEntity.ok().body(saleDetailsService.findSaleDetailsByCriteria(saleDetailsCriteria));
     }
 
+    @GetMapping("/findBySaleId/{id}")
+    public ResponseEntity<List<SaleDetailsDto>> getSaleDetailsByQueryBySaleId(
+            @PathVariable Long id
+    ) {
+        SaleDetailsCriteria saleDetailsCriteria = SaleDetailsCriteria.builder()
+                .saleId(id)
+                .build();
+        return ResponseEntity.ok().body(saleDetailsService.findSaleDetailsByCriteria(saleDetailsCriteria));
+    }
+
     @PostMapping
     public ResponseEntity<SaleDetailsDto> addSaleDetails(
             @RequestBody SaleDetailsDto saleDetailsDto) throws IOException {
