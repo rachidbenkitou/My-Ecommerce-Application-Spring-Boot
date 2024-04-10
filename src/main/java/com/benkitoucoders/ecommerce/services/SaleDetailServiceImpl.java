@@ -42,6 +42,17 @@ public class SaleDetailServiceImpl implements SaleDetailsService {
     }
 
     @Override
+    public List<SaleDetailsDto> findAllSaleDetailsById(Long id) throws EntityNotFoundException {
+        SaleDetailsCriteria saleDetailsCriteria = new SaleDetailsCriteria();
+        saleDetailsCriteria.setId(id);
+        List<SaleDetailsDto> saleDetailsDtoList = findSaleDetailsByCriteria(saleDetailsCriteria);
+        if (saleDetailsDtoList != null && !saleDetailsDtoList.isEmpty()) {
+            return saleDetailsDtoList;
+        } else {
+            throw new EntityNotFoundException("The details of sale with the id " + id + "  is not found.");
+        }
+    }
+    @Override
     public SaleDetailsDto persistSaleDetails(SaleDetailsDto saleDetailsDto) throws EntityNotFoundException {
         return saleDetailsMapper.modelToDto(saleDetailsDao.save(saleDetailsMapper.dtoToModel(saleDetailsDto)));
     }

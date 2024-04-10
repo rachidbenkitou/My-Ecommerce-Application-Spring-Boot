@@ -12,6 +12,8 @@ public interface SaleDetailsService {
 
     SaleDetailsDto findSaleDetailsById(Long id) throws EntityNotFoundException;
 
+    List<SaleDetailsDto> findAllSaleDetailsById(Long id) throws EntityNotFoundException;
+
     SaleDetailsDto persistSaleDetails(SaleDetailsDto saleDetailsDto) throws EntityNotFoundException;
 
     SaleDetailsDto updatesaleDetails(Long id, SaleDetailsDto saleDetailsDto) throws EntityNotFoundException;

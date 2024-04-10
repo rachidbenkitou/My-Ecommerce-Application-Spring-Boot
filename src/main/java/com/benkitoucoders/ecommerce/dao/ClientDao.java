@@ -23,7 +23,7 @@ public interface ClientDao extends JpaRepository<Client, Long>, JpaSpecification
     List<ClientDto> findAllClients(@Param("clientId") Long clientId,
                                    @Param("firstName") String firstName,
                                    @Param("lastName") String lastName,
-                                   @Param("emailservice") String email,
+                                   @Param("email") String email,
                                    @Param("phoneNumber") String phoneNumber,
                                    @Param("statusId") Long statusId
     );

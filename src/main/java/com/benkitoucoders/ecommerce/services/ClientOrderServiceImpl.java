@@ -1,12 +1,13 @@
 package com.benkitoucoders.ecommerce.services;
 
-import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
-import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.benkitoucoders.ecommerce.dao.ClientOrderDao;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
-import com.benkitoucoders.ecommerce.entities.ClientOrder;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
+import com.benkitoucoders.ecommerce.entities.ClientOrder;
+import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.mappers.ClientOrderMapper;
+import com.benkitoucoders.ecommerce.pdfgenerationservice.DeliveredOrderStatement;
+import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.benkitoucoders.ecommerce.utils.OrderStatusIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.List;
 public class ClientOrderServiceImpl implements ClientOrderService {
     private final ClientOrderDao clientOrderDao;
     private final ClientOrderMapper clientOrderMapper;
+    private final DeliveredOrderStatement deliveredOrderStatement;
 
     @Override
     public List<ClientOrderDto> getClientOrdersByQuery(Long orderId, Long clientId, Long orderStatusId, LocalDateTime dateCreation, LocalDateTime dateUpdate) {
@@ -70,7 +72,10 @@ public class ClientOrderServiceImpl implements ClientOrderService {
         try {
             ClientOrder clientOrder = retrieveClientOrderById(clientOrderId);
             clientOrder.setClientOrderStatusId(OrderStatusIds.ACCEPTED);
-            return clientOrderMapper.modelToDto(clientOrderDao.save(clientOrder));
+            ClientOrderDto clientOrderDto = clientOrderMapper.modelToDto(clientOrderDao.save(clientOrder));
+            deliveredOrderStatement.generateDeliveredOrderStatement(clientOrderId, clientOrderDto,true);
+            return clientOrderDto;
+
         } catch (Exception e) {
             throw new RuntimeException("An error occurred while modifying clientOrder status to accepted.", e);
 

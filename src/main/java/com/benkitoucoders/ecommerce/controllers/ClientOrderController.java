@@ -3,10 +3,12 @@ package com.benkitoucoders.ecommerce.controllers;
 import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.itextpdf.text.DocumentException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +26,7 @@ public class ClientOrderController {
                                                                        @RequestParam(name = "dateCreation", required = false) LocalDateTime dateCreation,
                                                                        @RequestParam(name = "dateUpdate", required = false) LocalDateTime dateUpdate,
                                                                        @RequestParam(name = "orderStatusId", required = false) Long orderStatusId
-    ) {
+    ) throws DocumentException, FileNotFoundException {
         return ResponseEntity.ok().body(clientOrderService.getClientOrdersByQuery(orderId, clientId, orderStatusId, dateCreation,
                 dateUpdate));
     }

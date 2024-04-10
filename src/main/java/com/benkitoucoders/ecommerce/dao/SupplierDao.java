@@ -10,6 +10,6 @@ import java.util.List;
 
 public interface SupplierDao extends JpaRepository<Supplier, Long> {
     @Query("SELECT s FROM Supplier s WHERE (:id IS NULL OR s.id = :id) And (:name IS NULL OR s.name = :name) AND (:email IS NULL OR s.email = :email) AND (:phoneNumber IS NULL OR s.phoneNumber = :phoneNumber)")
-    List<Supplier> findByCriteria(@Param("id") Long id,@Param("name") String name, @Param("emailservice") String email, @Param("phoneNumber") String phoneNumber, Pageable pageable);
+    List<Supplier> findByCriteria(@Param("id") Long id,@Param("name") String name, @Param("email") String email, @Param("phoneNumber") String phoneNumber, Pageable pageable);
 
 }

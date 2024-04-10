@@ -5,18 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2b4b1d01-80c9-4cea-be4d-8a2985e91621" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/emailservice/dtos/EmailDetails.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/emailservice/services/EmailService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/emailservice/services/impl/EmailServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/pdfgenerationservice/DeliveredOrderStatement.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/ClientOrderController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/controllers/ClientOrderController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/ClientDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/ClientDao.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/SupplierDao.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/dao/SupplierDao.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/ClientServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/ClientServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/SupplierServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/SupplierServiceImpl.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/utils/Constants.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/utils/Constants.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/application.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/pdfgenerationservice/DeliveredOrderStatement.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/pdfgenerationservice/DeliveredOrderStatement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/ClientOrderServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/ClientOrderServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/SaleDetailServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/SaleDetailServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/ClientOrderService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/ClientOrderService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/SaleDetailsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/benkitoucoders/ecommerce/services/inter/SaleDetailsService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,32 +39,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;JUnit.All in ecommerce-service.executor&quot;: &quot;Debug&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Spring Boot.EcommerceServiceApplication.executor&quot;: &quot;Run&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/PC/Desktop/Projects/1-Ecommerce/ecommerce-service&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "JUnit.All in ecommerce-service.executor": "Debug",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Spring Boot.EcommerceServiceApplication.executor": "Run",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/PC/Desktop/Projects/1-Ecommerce/ecommerce-service",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel",
+    "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Spring Boot.EcommerceServiceApplication">
     <configuration name="All in ecommerce-service" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="ecommerce-service" />
@@ -115,6 +117,7 @@
       <workItem from="1712596897943" duration="1242000" />
       <workItem from="1712681263215" duration="16000" />
       <workItem from="1712683643413" duration="1962000" />
+      <workItem from="1712688495356" duration="4532000" />
     </task>
     <servers />
   </component>
