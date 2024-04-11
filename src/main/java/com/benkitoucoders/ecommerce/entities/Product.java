@@ -33,6 +33,8 @@ public class Product implements Serializable {
 
     private Integer quantity;
 
+    private Integer productOrder;
+
     private String visibility;
     private String productImagePath;
 

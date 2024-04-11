@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface CategoryDao extends JpaRepository<Category, Long>, JpaSpecificationExecutor<Category> {
-    @Query("SELECT NEW com.benkitoucoders.ecommerce.dtos.CategoryDto(c.id, c.name, c.visbility, i.name, i.filePath) " +
+    @Query("SELECT NEW com.benkitoucoders.ecommerce.dtos.CategoryDto(c.id, c.name, c.visbility, i.name, i.filePath, c.categoryOrder) " +
             "FROM Category c " +
             "LEFT JOIN  Image i ON c.id = i.categoryId " +
             "WHERE (:categoryId IS NULL OR c.id = :categoryId) " +

@@ -1,5 +1,6 @@
 package com.benkitoucoders.ecommerce.dtos;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -7,6 +8,7 @@ import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
+@Builder
 public class ClientOrderDetailsDto implements Serializable {
     private Long id;
     private Long clientOrderId;

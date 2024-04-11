@@ -1,15 +1,15 @@
 package com.benkitoucoders.ecommerce.services;
 
-import com.benkitoucoders.ecommerce.services.inter.ClientOrderDetailsService;
 import com.benkitoucoders.ecommerce.dao.ClientOrderDetailsDao;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDetailsDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
+import com.benkitoucoders.ecommerce.entities.ClientOrderDetails;
 import com.benkitoucoders.ecommerce.mappers.ClientOrderDetailsMapper;
+import com.benkitoucoders.ecommerce.services.inter.ClientOrderDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -25,9 +25,11 @@ public class ClientOrderDetailsServiceImpl implements ClientOrderDetailsService 
     }
 
     @Override
-    public ClientOrderDetailsDto addClientOrderDetails(ClientOrderDetailsDto clientOrderDetailsDto) throws IOException {
+    public ClientOrderDetailsDto addClientOrderDetails(ClientOrderDetailsDto clientOrderDetailsDto) {
         clientOrderDetailsDto.setId(null);
-        return clientOrderDetailsMapper.modelToDto(clientOrderDetailsDao.save(clientOrderDetailsMapper.dtoToModel(clientOrderDetailsDto)));
+
+        ClientOrderDetails clientOrderDetails = clientOrderDetailsMapper.dtoToModel(clientOrderDetailsDto);
+        return clientOrderDetailsMapper.modelToDto(clientOrderDetailsDao.save(clientOrderDetails));
     }
 
     @Override

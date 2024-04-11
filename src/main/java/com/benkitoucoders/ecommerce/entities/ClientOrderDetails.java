@@ -2,13 +2,17 @@ package com.benkitoucoders.ecommerce.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 @Entity
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ClientOrderDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

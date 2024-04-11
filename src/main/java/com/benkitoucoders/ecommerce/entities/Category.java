@@ -23,6 +23,5 @@ public class Category implements Serializable {
     private String name;
 
     private String visbility;
-
-
+    private Integer categoryOrder;
 }

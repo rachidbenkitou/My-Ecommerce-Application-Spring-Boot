@@ -28,6 +28,8 @@ public class ProductDto {
     private Integer quantity;
 
     private String visibility;
+    private Integer productOrder;
+
 
     private Long categoryId;
 
@@ -45,7 +47,7 @@ public class ProductDto {
     public ProductDto(Long id, String name, String description, Double price
             , Double comparePrice, Integer quantity, String visibility, Long categoryId
             , String categoryName, LocalDate dateCreated, LocalDate dateUpdated
-            , String productImagePath, String filePath) {
+            , String productImagePath, String filePath, Integer productOrder) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -59,5 +61,6 @@ public class ProductDto {
         this.dateUpdated = dateUpdated;
         this.productImagePath = productImagePath;
         this.filePath = filePath;
+        this.productOrder = productOrder;
     }
 }

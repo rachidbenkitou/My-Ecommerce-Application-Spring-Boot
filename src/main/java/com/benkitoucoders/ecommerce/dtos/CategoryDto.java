@@ -17,6 +17,8 @@ public class CategoryDto implements Serializable {
     private String name;
 
     private String visbility;
+    private Integer categoryOrder;
+
 
     private String categoryImagePath;
 
@@ -24,12 +26,13 @@ public class CategoryDto implements Serializable {
     private String filePath;
     private MultipartFile categoryImage;
 
-    public CategoryDto(Long id, String name, String visibility, String categoryImagePath, String filePath) {
+    public CategoryDto(Long id, String name, String visibility, String categoryImagePath, String filePath,  Integer categoryOrder) {
         this.id = id;
         this.name = name;
         this.visbility = visibility;
         this.categoryImagePath = categoryImagePath;
         this.filePath=filePath;
+        this.categoryOrder=categoryOrder;
     }
 
 }

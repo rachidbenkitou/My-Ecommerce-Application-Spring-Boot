@@ -14,7 +14,8 @@ import java.util.List;
 @Repository
 public interface ProductDao extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product> {
     @Query(value = "SELECT new com.benkitoucoders.ecommerce.dtos.ProductDto(" +
-            " p.id, p.name, p.description, p.price, p.comparePrice, p.quantity, p.visibility, p.categoryId, c.name, p.dateCreated, p.dateUpdated, i.name, i.filePath)" +
+            " p.id, p.name, p.description, p.price, p.comparePrice, p.quantity, p.visibility, p.categoryId, c.name," +
+            " p.dateCreated, p.dateUpdated, i.name, i.filePath, p.productOrder)" +
             " FROM Product p" +
             " LEFT JOIN Category c ON p.categoryId = c.id" +
             " LEFT JOIN Image i ON p.id = i.productId" +

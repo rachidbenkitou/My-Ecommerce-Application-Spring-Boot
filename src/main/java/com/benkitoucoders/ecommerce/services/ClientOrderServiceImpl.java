@@ -55,8 +55,15 @@ public class ClientOrderServiceImpl implements ClientOrderService {
         // Map to store product IDs and their corresponding quantities
         Map<Long, Integer> productQuantities = new HashMap<>();
 
+        ClientOrderDto savedClientOrderDto = clientOrderMapper.modelToDto(clientOrderDao.save(clientOrderMapper.dtoToModel(clientOrderDto)));
         // Make sure if the product is out of stock
         for (ClientOrderDetailsDto clientOrderDetailsDto : clientOrderDto.getClientOrderDetailsDtos()) {
+
+
+            clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
+            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+
+
             long productId = clientOrderDetailsDto.getProductId();
             int orderQuantity = clientOrderDetailsDto.getQuantity();
 
@@ -85,7 +92,7 @@ public class ClientOrderServiceImpl implements ClientOrderService {
             productService.updateProduct(productId, productDto);
         }
 
-        return clientOrderMapper.modelToDto(clientOrderDao.save(clientOrderMapper.dtoToModel(clientOrderDto)));
+        return savedClientOrderDto;
     }
 
 
@@ -117,7 +124,7 @@ public class ClientOrderServiceImpl implements ClientOrderService {
             ClientOrder clientOrder = retrieveClientOrderById(clientOrderId);
             clientOrder.setClientOrderStatusId(OrderStatusIds.ACCEPTED);
             ClientOrderDto clientOrderDto = clientOrderMapper.modelToDto(clientOrderDao.save(clientOrder));
-            deliveredOrderStatement.generateDeliveredOrderStatement(clientOrderId, clientOrderDto,null, true);
+            deliveredOrderStatement.generateDeliveredOrderStatement(clientOrderId, clientOrderDto, null, true);
             return clientOrderDto;
 
         } catch (Exception e) {
