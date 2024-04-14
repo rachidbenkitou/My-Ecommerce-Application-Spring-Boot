@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/sales")
 @RequiredArgsConstructor
@@ -35,7 +37,7 @@ public class SaleController {
     }
 
     @PostMapping
-    public ResponseEntity<?> persistSales(@RequestBody SaleDto salesDto) throws EntityNotFoundException {
+    public ResponseEntity<?> persistSales(@RequestBody SaleDto salesDto) throws EntityNotFoundException, IOException {
         return ResponseEntity.ok(saleService.persistsales(salesDto));
     }
 

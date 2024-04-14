@@ -3,6 +3,7 @@ package com.benkitoucoders.ecommerce.controllers;
 import com.benkitoucoders.ecommerce.dtos.ProductDto;
 import com.benkitoucoders.ecommerce.services.ProductServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class ProductController {
 
     private final ProductServiceImpl productService;
@@ -36,7 +36,21 @@ public class ProductController {
                                                                @RequestParam(defaultValue = "0") int page, // Default page number
                                                                @RequestParam(defaultValue = "10") int size, // Default page size
                                                                @RequestParam(defaultValue = "id") String sortProperty, // Sort property
-                                                               @RequestParam(defaultValue = "ASC") String sortDirection) {
+                                                               @RequestParam(defaultValue = "ASC") String sortDirection,
+                                                               HttpServletRequest request) {
+
+
+        // Extracting the bearer token from the request headers
+        String bearerToken = request.getHeader("Authorization");
+
+        // Token extraction and manipulation can go here, if needed
+
+        // Example manipulation: Extracting token without "Bearer " prefix
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            String token = bearerToken.substring(7);
+            // Do something with the token if needed
+            System.out.println(token);
+        }
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortProperty);
         Pageable pageable = PageRequest.of(page, size, sort);
@@ -56,7 +70,7 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}")
-    @PreAuthorize("hasRole('client_user')")
+//    @PreAuthorize("hasRole('client_user')")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
         return ResponseEntity.ok().body(productService.getProductById(productId));
     }

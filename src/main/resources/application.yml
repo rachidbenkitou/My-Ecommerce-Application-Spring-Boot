@@ -10,13 +10,13 @@ cloud:
 
 application:
   bucket:
-    name: ecommerceservice-file
+    name: ecommerce-service-file
 
 
 jwt:
   auth:
     converter:
-      resource-id: ecommerceservice-service-client
+      resource-id: admin-cli
       principle-attribute: preferred_username
 
 spring:
@@ -24,7 +24,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8080/realms/ecommerce-service-realm
+          issuer-uri: http://localhost:8080/realms/master
           jwk-set-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}/protocol/openid-connect/certs
 
   mail:
@@ -62,10 +62,10 @@ server:
 
 # My Custom Params
 myKeycloak:
-  users-endpoint: http://localhost:8080/admin/realms/ecommerce-service-realm/users
-  token-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/token
-  logout-endpoint: http://localhost:8080/realms/ecommerce-service-realm/protocol/openid-connect/logout
-  roles-endpoint: http://localhost:8080/admin/realms/ecommerce-service-realm/roles
+  users-endpoint: http://localhost:8080/admin/realms/master/users
+  token-endpoint: http://localhost:8080/realms/master/protocol/openid-connect/token
+  logout-endpoint: http://localhost:8080/realms/master/protocol/openid-connect/logout
+  roles-endpoint: http://localhost:8080/admin/realms/master/roles
 
   client:
     default-role-id: 2a0e9424-ed1b-4ec6-8138-daec9c1e9735

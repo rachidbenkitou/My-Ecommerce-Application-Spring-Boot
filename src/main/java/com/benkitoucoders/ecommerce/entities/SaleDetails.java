@@ -5,8 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -30,7 +32,9 @@ public class SaleDetails {
     private Long packageQuantity;
     private Double price;
     private Integer quantity;
+    @CreationTimestamp
     private LocalDateTime dateCreation;
+    @UpdateTimestamp
     private LocalDateTime dateUpdate;
     @ManyToOne
     @JoinColumn(name = "product_id", referencedColumnName = "ID", insertable = false, updatable = false)

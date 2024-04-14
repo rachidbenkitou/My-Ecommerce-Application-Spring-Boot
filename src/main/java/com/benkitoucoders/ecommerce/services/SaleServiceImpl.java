@@ -2,19 +2,26 @@ package com.benkitoucoders.ecommerce.services;
 
 import com.benkitoucoders.ecommerce.criteria.SaleCriteria;
 import com.benkitoucoders.ecommerce.dao.SaleDao;
+import com.benkitoucoders.ecommerce.dtos.ProductDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
+import com.benkitoucoders.ecommerce.dtos.SaleDetailsDto;
 import com.benkitoucoders.ecommerce.dtos.SaleDto;
 import com.benkitoucoders.ecommerce.entities.Sale;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.benkitoucoders.ecommerce.exceptions.NoStockExistException;
 import com.benkitoucoders.ecommerce.mappers.SaleMapper;
+import com.benkitoucoders.ecommerce.services.inter.SaleDetailsService;
 import com.benkitoucoders.ecommerce.services.inter.SaleService;
 import com.benkitoucoders.ecommerce.services.pdfs.DeliveredOrderStatement;
 import com.benkitoucoders.ecommerce.utils.OrderStatusIds;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +32,7 @@ public class SaleServiceImpl implements SaleService {
     private final SaleMapper saleMapper;
     private final ProductServiceImpl productService;
     private final DeliveredOrderStatement deliveredOrderStatement;
+    private final SaleDetailsService saleDetailsService;
 
     public List<SaleDto> findsalesByCriteria(SaleCriteria saleCriteria) throws EntityNotFoundException {
         return saleDao.getSalesByQuery(saleCriteria.getId(), saleCriteria.getSaleStatusId());
@@ -43,11 +51,52 @@ public class SaleServiceImpl implements SaleService {
     }
 
     @Override
-    public SaleDto persistsales(SaleDto saleDto) throws EntityNotFoundException {
+    public SaleDto persistsales(SaleDto saleDto) throws IOException, IOException {
         saleDto.setId(null);
         saleDto.setSaleStatusId(OrderStatusIds.IN_PROGRESS);
-        return saleMapper.modelToDto(saleDao.save(saleMapper.dtoToModel(saleDto)));
+        // Map to store product IDs and their corresponding quantities
+        Map<Long, Integer> productQuantities = new HashMap<>();
+
+        // Save the sale
+        Sale savedSale = saleDao.save(saleMapper.dtoToModel(saleDto));
+
+        // Iterate over sale details
+        for (SaleDetailsDto saleDetailsDto : saleDto.getSaleDetails()) {
+            saleDetailsDto.setId(null); // Set ID to null for new entity
+            saleDetailsDto.setSaleId(savedSale.getId()); // Set sale ID
+            saleDetailsService.persistSaleDetails(saleDetailsDto); // Save SaleDetailsDto
+
+            long productId = saleDetailsDto.getProductId();
+            int soldQuantity = saleDetailsDto.getQuantity();
+
+            // Fetch product and its quantity
+            ProductDto productDto = productService.getProductById(productId);
+            int availableQuantity = productDto.getQuantity();
+
+            // Check if there's enough stock for the product
+            if (availableQuantity < soldQuantity) {
+                System.out.println(availableQuantity + " Available");
+                System.out.println(soldQuantity + " Sold");
+                throw new NoStockExistException("Sorry, there is no stock for the product: " + productDto.getName());
+            }
+
+            // Update product quantity map for later use
+            productQuantities.put(productId, availableQuantity - soldQuantity);
+        }
+
+        // Update the stock (decrease the quantity of the product)
+        for (Map.Entry<Long, Integer> entry : productQuantities.entrySet()) {
+            long productId = entry.getKey();
+            int newQuantity = entry.getValue();
+
+            ProductDto productDto = productService.getProductById(productId);
+            productDto.setQuantity(newQuantity);
+            productService.updateProduct(productId, productDto);
+        }
+
+        return saleMapper.modelToDto(savedSale);
     }
+
 
     @Override
     public SaleDto updatesales(Long id, SaleDto saleDto) throws EntityNotFoundException {

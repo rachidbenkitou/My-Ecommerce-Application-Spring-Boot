@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -24,6 +26,7 @@ public class SaleDto {
     private Long saleStatusId;
     private String saleStatusName;
     private String saleStatusColor;
+    private List<SaleDetailsDto> saleDetails = new ArrayList<>();
 
     public SaleDto(Long id, String address, String email, String phone, Double totalPrice, String saleStatus,
                    LocalDateTime dateCreation, LocalDateTime dateUpdate, Long saleStatusId,
