@@ -54,6 +54,8 @@ public class SaleServiceImpl implements SaleService {
     public SaleDto persistsales(SaleDto saleDto) throws IOException, IOException {
         saleDto.setId(null);
         saleDto.setSaleStatusId(OrderStatusIds.IN_PROGRESS);
+        double totalClientOrderPrice = 0.0;
+
         // Map to store product IDs and their corresponding quantities
         Map<Long, Integer> productQuantities = new HashMap<>();
 
@@ -63,8 +65,7 @@ public class SaleServiceImpl implements SaleService {
         // Iterate over sale details
         for (SaleDetailsDto saleDetailsDto : saleDto.getSaleDetails()) {
             saleDetailsDto.setId(null); // Set ID to null for new entity
-            saleDetailsDto.setSaleId(savedSale.getId()); // Set sale ID
-            saleDetailsService.persistSaleDetails(saleDetailsDto); // Save SaleDetailsDto
+
 
             long productId = saleDetailsDto.getProductId();
             int soldQuantity = saleDetailsDto.getQuantity();
@@ -73,10 +74,14 @@ public class SaleServiceImpl implements SaleService {
             ProductDto productDto = productService.getProductById(productId);
             int availableQuantity = productDto.getQuantity();
 
+            saleDetailsDto.setSaleId(savedSale.getId()); // Set sale ID
+            saleDetailsDto.setPrice(productDto.getPrice());
+            saleDetailsService.persistSaleDetails(saleDetailsDto); // Save SaleDetailsDto
+
+            totalClientOrderPrice += (productDto.getPrice() * saleDetailsDto.getQuantity());
+
             // Check if there's enough stock for the product
             if (availableQuantity < soldQuantity) {
-                System.out.println(availableQuantity + " Available");
-                System.out.println(soldQuantity + " Sold");
                 throw new NoStockExistException("Sorry, there is no stock for the product: " + productDto.getName());
             }
 
@@ -94,6 +99,8 @@ public class SaleServiceImpl implements SaleService {
             productService.updateProduct(productId, productDto);
         }
 
+        savedSale.setTotalPrice(totalClientOrderPrice);
+        saleDao.save(savedSale);
         return saleMapper.modelToDto(savedSale);
     }
 

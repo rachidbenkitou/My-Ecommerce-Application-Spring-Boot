@@ -51,7 +51,7 @@ public class ClientOrderServiceImpl implements ClientOrderService {
     public ClientOrderDto addClientOrder(ClientOrderDto clientOrderDto) throws IOException {
         clientOrderDto.setId(null);
         clientOrderDto.setClientOrderStatusId(OrderStatusIds.IN_PROGRESS);
-
+        double totalClientOrderPrice = 0.0;
         // Map to store product IDs and their corresponding quantities
         Map<Long, Integer> productQuantities = new HashMap<>();
 
@@ -60,16 +60,21 @@ public class ClientOrderServiceImpl implements ClientOrderService {
         for (ClientOrderDetailsDto clientOrderDetailsDto : clientOrderDto.getClientOrderDetailsDtos()) {
 
 
-            clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
-            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
-
-
             long productId = clientOrderDetailsDto.getProductId();
             int orderQuantity = clientOrderDetailsDto.getQuantity();
+
 
             // Fetch product and its quantity
             ProductDto productDto = productService.getProductById(productId);
             int availableQuantity = productDto.getQuantity();
+
+
+            clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
+            clientOrderDetailsDto.setPrice(productDto.getPrice());
+            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+
+            totalClientOrderPrice += (productDto.getPrice() * clientOrderDetailsDto.getQuantity());
+
 
             // Check if there's enough stock for the product
             if (availableQuantity < orderQuantity) {
@@ -92,6 +97,8 @@ public class ClientOrderServiceImpl implements ClientOrderService {
             productService.updateProduct(productId, productDto);
         }
 
+        savedClientOrderDto.setTotalPrice(totalClientOrderPrice);
+        clientOrderDao.save(clientOrderMapper.dtoToModel(savedClientOrderDto));
         return savedClientOrderDto;
     }
 
