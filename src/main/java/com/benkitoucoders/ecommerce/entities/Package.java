@@ -1,6 +1,11 @@
 package com.benkitoucoders.ecommerce.entities;
+
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -21,6 +26,8 @@ public class Package implements Serializable {
 
     @Column(name = "DESCRIPTION")
     private String description;
+    private String packageDetails;
+
 
     @Column(name = "ACTIVE")
     private String active;
@@ -38,9 +45,9 @@ public class Package implements Serializable {
     private Long userUpdate;
 
     @Column(name = "PRICE")
-    private  Double price;
-
-
+    private Double price;
+    private Double comparePrice;
+    private String packageImagePath;
 
 
 }

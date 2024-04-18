@@ -10,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,7 +48,7 @@ public class ProductController {
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             String token = bearerToken.substring(7);
             // Do something with the token if needed
-            System.out.println(token);
+
         }
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortProperty);

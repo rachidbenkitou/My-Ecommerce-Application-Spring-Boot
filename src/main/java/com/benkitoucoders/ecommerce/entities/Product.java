@@ -26,6 +26,9 @@ public class Product implements Serializable {
     private String name;
 
     private String description;
+    private String productDetails;
+    @Lob
+    private byte[] compressedProductDetails;
 
     private Double price;
 

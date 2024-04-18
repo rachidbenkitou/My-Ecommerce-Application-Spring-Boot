@@ -20,6 +20,10 @@ public class ProductDto {
     private String name;
 
     private String description;
+    private String productDetails;
+    private byte[] compressedProductDetails;
+
+
 
     private Double price;
 
@@ -47,7 +51,7 @@ public class ProductDto {
     public ProductDto(Long id, String name, String description, Double price
             , Double comparePrice, Integer quantity, String visibility, Long categoryId
             , String categoryName, LocalDate dateCreated, LocalDate dateUpdated
-            , String productImagePath, String filePath, Integer productOrder) {
+            , String productImagePath, String filePath, Integer productOrder, String productDetails) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -62,5 +66,6 @@ public class ProductDto {
         this.productImagePath = productImagePath;
         this.filePath = filePath;
         this.productOrder = productOrder;
+        this.productDetails=productDetails;
     }
 }
