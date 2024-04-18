@@ -1,7 +1,10 @@
 package com.benkitoucoders.ecommerce.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
@@ -27,6 +30,9 @@ public class Image implements Serializable {
     @Column(name = "PRODUCT_ID")
     private Long productId;
 
+    @Column(name = "PACKAGE_ID")
+    private Long packageId;
+
     @Column(name = "CATEGORY_ID")
     private Long categoryId;
 
@@ -34,6 +40,11 @@ public class Image implements Serializable {
     @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "PACKAGE_ID", referencedColumnName = "ID", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Package Package;
 
     @ManyToOne
     @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "ID", insertable = false, updatable = false)

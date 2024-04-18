@@ -3,6 +3,7 @@ package com.benkitoucoders.ecommerce.dtos;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,13 +24,15 @@ public class PackageDto {
     private Double price;
     private Double comparePrice;
     private String packageImagePath;
-
+    private String filePath;
+    private List<MultipartFile> packageImages;
 
     private List<ProductDto> productDtos;
 
 
     public PackageDto(Long id, String name, String description, LocalDateTime dateCreation, Long userCreation,
-                      LocalDateTime dateUpdate, Long userUpdate, Double price, String active, String packageDetails, Double comparePrice, String packageImagePath) {
+                      LocalDateTime dateUpdate, Long userUpdate, Double price, String active, String packageDetails,
+                      Double comparePrice, String packageImagePath, String filePath) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -40,6 +43,7 @@ public class PackageDto {
         this.dateUpdate = dateUpdate;
         this.userUpdate = userUpdate;
         this.price = price;
+        this.filePath = filePath;
         this.comparePrice = comparePrice;
         this.packageImagePath = packageImagePath;
         this.packageDetails = packageDetails;

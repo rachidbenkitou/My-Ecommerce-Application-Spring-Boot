@@ -48,6 +48,7 @@ public class Package implements Serializable {
     private Double price;
     private Double comparePrice;
     private String packageImagePath;
+    private String filePath;
 
 
 }

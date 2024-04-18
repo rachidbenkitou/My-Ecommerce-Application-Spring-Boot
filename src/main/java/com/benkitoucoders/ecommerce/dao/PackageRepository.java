@@ -15,7 +15,8 @@ import java.util.List;
 public interface PackageRepository extends JpaRepository<Package, Long>, JpaSpecificationExecutor<Package> {
 @Query(value = "select new com.benkitoucoders.ecommerce.dtos.PackageDto(" +
         "package.id ,package.name,package.description,package.dateCreation,package.userCreation," +
-        "package.dateUpdate, package.userUpdate,package.price,package.active, package.packageDetails, package.comparePrice, package.packageImagePath)" +
+        "package.dateUpdate, package.userUpdate,package.price,package.active, package.packageDetails," +
+        " package.comparePrice, package.packageImagePath, package.filePath)" +
         " from Package package" +
         " where (:packageId is null or package.id=:packageId) " +
         " and (:active is null or package.active=:active) " +

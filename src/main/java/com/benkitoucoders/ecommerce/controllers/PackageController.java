@@ -11,6 +11,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/packages")
 @RequiredArgsConstructor
@@ -47,7 +49,7 @@ public class PackageController {
     }
 
     @PostMapping
-    public ResponseEntity<?> persistpackages(@RequestBody PackageDto packagesDto) throws EntityNotFoundException {
+    public ResponseEntity<?> persistpackages(@RequestBody PackageDto packagesDto) throws EntityNotFoundException, IOException {
         return ResponseEntity.ok(packageService.persistPackages(packagesDto));
     }
 

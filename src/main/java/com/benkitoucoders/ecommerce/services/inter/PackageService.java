@@ -6,6 +6,7 @@ import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import org.springframework.data.domain.Pageable;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface PackageService {
@@ -13,7 +14,7 @@ public interface PackageService {
 
     public PackageDto findPackagesById(Long id) throws EntityNotFoundException;
 
-    public PackageDto persistPackages(PackageDto packagesDto) throws EntityNotFoundException;
+    public PackageDto persistPackages(PackageDto packagesDto) throws EntityNotFoundException, IOException;
 
     public PackageDto updatePackages(Long id, PackageDto packagesDto) throws EntityNotFoundException;
 

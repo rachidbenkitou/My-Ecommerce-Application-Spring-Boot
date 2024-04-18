@@ -2,34 +2,60 @@ package com.benkitoucoders.ecommerce.services;
 
 import com.benkitoucoders.ecommerce.criteria.PackageCriteria;
 import com.benkitoucoders.ecommerce.criteria.PackageProductCriteria;
+import com.benkitoucoders.ecommerce.dao.ImageDao;
 import com.benkitoucoders.ecommerce.dao.PackageRepository;
 import com.benkitoucoders.ecommerce.dtos.PackageDto;
 import com.benkitoucoders.ecommerce.dtos.PackageProductDto;
 import com.benkitoucoders.ecommerce.dtos.ProductDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.benkitoucoders.ecommerce.exceptions.EntityServiceException;
 import com.benkitoucoders.ecommerce.mappers.PackageMapper;
+import com.benkitoucoders.ecommerce.services.inter.ImageService;
 import com.benkitoucoders.ecommerce.services.inter.PackageProductService;
 import com.benkitoucoders.ecommerce.services.inter.PackageService;
+import com.benkitoucoders.ecommerce.services.strategy.inter.ImagesUploadStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Transactional
 public class PackageServiceImpl implements PackageService {
 
-    @Autowired
-    private PackageRepository packageRepository;
-    @Autowired
-    private PackageMapper packageMapper;
+    private final PackageRepository packageRepository;
+    private final PackageMapper packageMapper;
+    private final PackageProductService packageProductService;
+    private final ProductServiceImpl productService;
+    private final ImageService imageService;
+    private final ImagesUploadStrategy imagesUploadStrategy;
+    private final ImageDao imageDao;
 
     @Autowired
-    private PackageProductService packageProductService;
-    @Autowired
-    private ProductServiceImpl productService;
+    public PackageServiceImpl(
+            PackageRepository packageRepository,
+            PackageMapper packageMapper,
+            PackageProductService packageProductService,
+            ProductServiceImpl productService,
+            ImageService imageService,
+            @Qualifier("packageImageUploadStrategy") ImagesUploadStrategy imagesUploadStrategy,
+            ImageDao imageDao
+    ) {
+        this.packageRepository = packageRepository;
+        this.packageMapper = packageMapper;
+        this.packageProductService = packageProductService;
+        this.productService = productService;
+        this.imageService = imageService;
+        this.imagesUploadStrategy = imagesUploadStrategy;
+        this.imageDao = imageDao;
+    }
+
 
     public List<PackageDto> findPackagesByCriteria(PackageCriteria packageCriteria, Pageable pageable) {
         List<PackageDto> packageDtosList = packageRepository.getAllPackageByQuery(packageCriteria.getId(), packageCriteria.getName(), packageCriteria.getActive(), pageable);
@@ -62,23 +88,30 @@ public class PackageServiceImpl implements PackageService {
         return packageDtosList.get(0);
     }
 
-    public PackageDto persistPackages(PackageDto packagesDto) throws EntityNotFoundException {
-        PackageDto packageDto = packageMapper.modelToDto(packageRepository.save(packageMapper.dtoToModel(packagesDto)));
-        if (packageDto.getProductDtos() != null) {
-            PackageProductDto packageProductDto = new PackageProductDto();
-            packageDto.getProductDtos().forEach(productDto -> {
-//                ProductDto productDto1 = productService.addProduct(productDto);
-//                packageProductDto.setProductId(productDto1.getId());
-//                packageProductDto.setPackageId(packageDto.getId());
-//                packageProductService.persistPackageProduct(packageProductDto);
-            });
+    public PackageDto persistPackages(PackageDto packagesDto) throws EntityNotFoundException, IOException {
+        PackageDto savedPackageDto = packageMapper.modelToDto(packageRepository.save(packageMapper.dtoToModel(packagesDto)));
+
+        if (savedPackageDto != null) {
+            imagesUploadStrategy.uploadImages(packagesDto.getPackageImages(), savedPackageDto.getId());
+            return savedPackageDto;
+        } else {
+            throw new RuntimeException("Error while saving the package.");
         }
-        return packageDto;
     }
 
     public PackageDto updatePackages(Long id, PackageDto packagesDto) throws EntityNotFoundException {
-        // delete the old product from details and add new product
-        return null;
+        try {
+            PackageDto oldPackageDto = findPackagesById(id);
+            packagesDto.setId(oldPackageDto.getId());
+            if (packagesDto.getPackageImages() != null && !packagesDto.getPackageImages().isEmpty()) {
+                imageService.deleteImageByFilePathFromLocalSystem(oldPackageDto.getFilePath());
+                imageDao.deleteAllByPackageId(oldPackageDto.getId());
+                imagesUploadStrategy.uploadImages(packagesDto.getPackageImages(), packagesDto.getId());
+            }
+            return packageMapper.modelToDto(packageRepository.save(packageMapper.dtoToModel(packagesDto)));
+        } catch (Exception e) {
+            throw new EntityServiceException("An error occurred while updating the package.", e);
+        }
     }
 
     public ResponseDto deletePackagesById(Long id) throws EntityNotFoundException {
@@ -87,6 +120,8 @@ public class PackageServiceImpl implements PackageService {
         // verifier si packege deja vendu
         packageProductService.deleteProductFromPackage(packagesDto.getId());
         packageRepository.deleteById(id);
+        imageService.deleteImageByFilePathFromLocalSystem(packagesDto.getFilePath());
+
         responseDto.setMessage("élément bien supprimé");
         return responseDto;
     }

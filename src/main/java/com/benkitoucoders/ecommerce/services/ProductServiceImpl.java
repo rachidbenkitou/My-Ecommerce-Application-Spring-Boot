@@ -1,17 +1,18 @@
 package com.benkitoucoders.ecommerce.services;
 
+import com.benkitoucoders.ecommerce.dao.ImageDao;
+import com.benkitoucoders.ecommerce.dao.ProductDao;
+import com.benkitoucoders.ecommerce.dtos.ProductDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.exceptions.EntityServiceException;
+import com.benkitoucoders.ecommerce.mappers.ProductMapper;
 import com.benkitoucoders.ecommerce.services.inter.ImageService;
 import com.benkitoucoders.ecommerce.services.inter.ProductService;
 import com.benkitoucoders.ecommerce.services.strategy.inter.ImagesUploadStrategy;
-import com.benkitoucoders.ecommerce.dao.ImageDao;
-import com.benkitoucoders.ecommerce.dao.ProductDao;
-import com.benkitoucoders.ecommerce.dtos.ProductDto;
-import com.benkitoucoders.ecommerce.mappers.ProductMapper;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +24,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductDao productDao;
@@ -31,6 +31,16 @@ public class ProductServiceImpl implements ProductService {
     private final ImageService imageService;
     private final ImagesUploadStrategy imagesUploadStrategy;
     private final ImageDao imageDao;
+
+    @Autowired
+    public ProductServiceImpl(ProductDao productDao, ProductMapper productMapper, ImageService imageService,
+                              @Qualifier("productImageUploadStrategy") ImagesUploadStrategy imagesUploadStrategy, ImageDao imageDao) {
+        this.productDao = productDao;
+        this.productMapper = productMapper;
+        this.imageService = imageService;
+        this.imagesUploadStrategy = imagesUploadStrategy;
+        this.imageDao = imageDao;
+    }
 
     @Override
     @Cacheable(value = "productsByQueryCache", key = "{#id, #name, #price, #quantity, #visibility, #categoryId, #pageable}")

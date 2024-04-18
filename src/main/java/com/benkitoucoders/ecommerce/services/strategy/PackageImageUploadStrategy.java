@@ -8,6 +8,7 @@ import com.benkitoucoders.ecommerce.services.strategy.inter.ImageUploadStrategy;
 import com.benkitoucoders.ecommerce.services.strategy.inter.ImagesUploadStrategy;
 import com.benkitoucoders.ecommerce.utils.Constants;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,14 +24,13 @@ import java.util.Optional;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProductImageUploadStrategy implements ImageUploadStrategy, ImagesUploadStrategy {
-
+public class PackageImageUploadStrategy implements ImageUploadStrategy, ImagesUploadStrategy {
     private final ImageDao imageDao;
     private final ImageMapper imageMapper;
 
     @Override
-    public void uploadImage(MultipartFile file, Long productId) throws IOException {
-        String folderPath = Constants.IMAGE_FOLDER_PATH + "products/product_" + productId + "/";
+    public void uploadImage(MultipartFile file, Long packageId) throws IOException {
+        String folderPath = Constants.IMAGE_FOLDER_PATH + "packages/package_" + packageId + "/";
         String filePath = folderPath + file.getOriginalFilename();
 
         Optional<Image> existingImage = imageDao.findByFilePath(filePath);
@@ -41,12 +41,13 @@ public class ProductImageUploadStrategy implements ImageUploadStrategy, ImagesUp
         Image image = imageDao.save(
                 Image.builder()
                         .name(file.getOriginalFilename())
-                        .productId(productId)
+                        .packageId(packageId)
+                        .productId(null)
                         .categoryId(null)
                         .type(file.getContentType())
                         .filePath(filePath).build());
 
-        // Create the product's folder if it doesn't exist
+        // Create the package's folder if it doesn't exist
         Path path = Paths.get(folderPath);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
@@ -61,9 +62,10 @@ public class ProductImageUploadStrategy implements ImageUploadStrategy, ImagesUp
     }
 
     @Override
-    public void uploadImages(List<MultipartFile> images, Long productId) throws IOException {
+    public void uploadImages(List<MultipartFile> images, Long packageId) throws IOException {
         for (MultipartFile image : images) {
-            uploadImage(image, productId);
+            uploadImage(image, packageId);
         }
     }
+
 }
