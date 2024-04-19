@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -78,12 +79,19 @@ public class PackageServiceImpl implements PackageService {
         return packageDtosList;
     }
 
+
     public PackageDto findPackagesById(Long id) throws EntityNotFoundException {
         PackageCriteria packageCriteria = PackageCriteria.builder().id(id).build();
         List<PackageDto> packageDtosList = packageRepository.getAllPackageByQuery(
                 packageCriteria.getId(), packageCriteria.getName(), packageCriteria.getActive(), null);
         if (packageDtosList.isEmpty()) {
-            throw new EntityNotFoundException("this package n'existe pas ");
+            throw new EntityNotFoundException("The package does not exists. ");
+        }
+        List<PackageProductDto> packageProductDtoList = packageProductService.findPackageProductByPackageId(packageDtosList.get(0).getId());
+        packageDtosList.get(0).setProductDtos(new ArrayList<>());
+        for (PackageProductDto packageProductDto : packageProductDtoList) {
+            ProductDto productDto = productService.getProductById(packageProductDto.getProductId());
+            packageDtosList.get(0).getProductDtos().add(productDto);
         }
         return packageDtosList.get(0);
     }

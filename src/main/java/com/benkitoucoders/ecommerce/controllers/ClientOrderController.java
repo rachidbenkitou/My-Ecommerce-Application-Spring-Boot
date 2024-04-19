@@ -1,10 +1,10 @@
 package com.benkitoucoders.ecommerce.controllers;
 
-import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.itextpdf.text.DocumentException;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,10 +15,15 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientOrders")
-@AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class ClientOrderController {
     private ClientOrderService clientOrderService;
+    private ClientOrderService packageClientOrderService;
+
+    public ClientOrderController(@Qualifier("clientOrderServiceImpl") ClientOrderService clientOrderService,
+                                 @Qualifier("packageClientOrderServiceImpl") ClientOrderService packageClientOrderService) {
+        this.clientOrderService = clientOrderService;
+        this.packageClientOrderService = packageClientOrderService;
+    }
 
     @GetMapping
     public ResponseEntity<List<ClientOrderDto>> getClientOrdersByQuery(@RequestParam(name = "orderId", required = false) Long orderId,
@@ -42,6 +47,11 @@ public class ClientOrderController {
         return ResponseEntity.ok().body(clientOrderService.addClientOrder(clientOrderDto));
     }
 
+    @PostMapping("/package")
+    public ResponseEntity<ClientOrderDto> addPackageClientOrder(
+            @RequestBody ClientOrderDto clientOrderDto) throws IOException {
+        return ResponseEntity.ok().body(packageClientOrderService.addClientOrder(clientOrderDto));
+    }
 
     @PutMapping("/{clientOrderId}")
     public ResponseEntity<ClientOrderDto> updateClientOrder(@PathVariable Long clientOrderId, @RequestBody ClientOrderDto clientOrderDto) {

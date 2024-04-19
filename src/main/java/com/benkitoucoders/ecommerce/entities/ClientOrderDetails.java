@@ -23,6 +23,10 @@ public class ClientOrderDetails {
 
     @Column(name = "PRODUCT_ID")
     private Long productId;
+
+    @Column(name = "PACKAGE_ID")
+    private Long packageId;
+
     private Double price;
     private Integer quantity;
 
@@ -30,6 +34,11 @@ public class ClientOrderDetails {
     @JoinColumn(name = "PRODUCT_ID", referencedColumnName = "ID", insertable = false, updatable = false)
     @NotFound(action = NotFoundAction.IGNORE)
     private Product product;
+
+    @ManyToOne
+    @JoinColumn(name = "PACKAGE_ID", referencedColumnName = "ID", insertable = false, updatable = false)
+    @NotFound(action = NotFoundAction.IGNORE)
+    private Package aPackage;
 
     @ManyToOne
     @JoinColumn(name = "CLIENT_ORDER_ID", referencedColumnName = "ID", insertable = false, updatable = false)

@@ -28,8 +28,6 @@ public class SaleDetails {
     private Long productId;
     @Column(name = "package_id")
     private Long packageId;
-    @Column(name = "package_quantity")
-    private Long packageQuantity;
     private Double price;
     private Integer quantity;
     @CreationTimestamp

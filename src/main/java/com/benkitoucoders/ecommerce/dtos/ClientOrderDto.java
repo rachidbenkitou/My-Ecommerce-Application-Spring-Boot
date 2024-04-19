@@ -1,6 +1,5 @@
 package com.benkitoucoders.ecommerce.dtos;
 
-import com.benkitoucoders.ecommerce.entities.ClientOrderDetails;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -29,7 +28,8 @@ public class ClientOrderDto implements Serializable {
 
     public ClientOrderDto(Long id, Double totalPrice, Long clientId, String clientFirstName, String clientLastName,
                           String clientEmail, String clientPhoneNumber, String description,
-                          LocalDateTime dateCreation, LocalDateTime dateUpdate, Long clientOrderStatusId, String clientOrderStatusName, String clientOrderStatusColor) {
+                          LocalDateTime dateCreation, LocalDateTime dateUpdate,
+                          Long clientOrderStatusId, String clientOrderStatusName, String clientOrderStatusColor) {
 
         this.id = id;
         this.totalPrice = totalPrice;
@@ -44,6 +44,5 @@ public class ClientOrderDto implements Serializable {
         this.clientOrderStatusId = clientOrderStatusId;
         this.clientOrderStatusName = clientOrderStatusName;
         this.clientOrderStatusColor = clientOrderStatusColor;
-
     }
 }

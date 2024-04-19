@@ -46,7 +46,7 @@ spring:
       max-file-size: 100MB
       max-request-size: 100MB
   datasource:
-    url: jdbc:mysql://localhost/ecommerce?createDatabaseIfNotExist=true
+    url: jdbc:mysql://localhost/ecommerce_service?createDatabaseIfNotExist=true
     username: root
     password:
     driver-class-name: com.mysql.cj.jdbc.Driver

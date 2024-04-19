@@ -52,10 +52,9 @@ public class SaleServiceImpl implements SaleService {
 
     @Override
     public SaleDto persistsales(SaleDto saleDto) throws IOException, IOException {
+        double orderTotalPrice = 0;
         saleDto.setId(null);
         saleDto.setSaleStatusId(OrderStatusIds.IN_PROGRESS);
-        double totalClientOrderPrice = 0.0;
-
         // Map to store product IDs and their corresponding quantities
         Map<Long, Integer> productQuantities = new HashMap<>();
 
@@ -64,21 +63,21 @@ public class SaleServiceImpl implements SaleService {
 
         // Iterate over sale details
         for (SaleDetailsDto saleDetailsDto : saleDto.getSaleDetails()) {
+
+            orderTotalPrice += (saleDetailsDto.getPrice() * saleDetailsDto.getQuantity());
+
             saleDetailsDto.setId(null); // Set ID to null for new entity
+            saleDetailsDto.setSaleId(savedSale.getId()); // Set sale ID
+            saleDetailsDto.setPrice(saleDetailsDto.getPrice() * saleDetailsDto.getQuantity());
+            saleDetailsService.persistSaleDetails(saleDetailsDto); // Save SaleDetailsDto
 
-
+            // Start Validation if the quantity is in stock or not
             long productId = saleDetailsDto.getProductId();
             int soldQuantity = saleDetailsDto.getQuantity();
 
             // Fetch product and its quantity
             ProductDto productDto = productService.getProductById(productId);
             int availableQuantity = productDto.getQuantity();
-
-            saleDetailsDto.setSaleId(savedSale.getId()); // Set sale ID
-            saleDetailsDto.setPrice(productDto.getPrice());
-            saleDetailsService.persistSaleDetails(saleDetailsDto); // Save SaleDetailsDto
-
-            totalClientOrderPrice += (productDto.getPrice() * saleDetailsDto.getQuantity());
 
             // Check if there's enough stock for the product
             if (availableQuantity < soldQuantity) {
@@ -89,6 +88,10 @@ public class SaleServiceImpl implements SaleService {
             productQuantities.put(productId, availableQuantity - soldQuantity);
         }
 
+        // Validate if the Sale price is equal to saleOrderDetails total ordered products price (like this we will sure that the order pricing is logic)
+        if (orderTotalPrice != savedSale.getTotalPrice()) {
+            throw new NoStockExistException("Sorry, impossible to affect this order, order total price  and some of order details price are not the same");
+        }
         // Update the stock (decrease the quantity of the product)
         for (Map.Entry<Long, Integer> entry : productQuantities.entrySet()) {
             long productId = entry.getKey();
@@ -99,8 +102,6 @@ public class SaleServiceImpl implements SaleService {
             productService.updateProduct(productId, productDto);
         }
 
-        savedSale.setTotalPrice(totalClientOrderPrice);
-        saleDao.save(savedSale);
         return saleMapper.modelToDto(savedSale);
     }
 

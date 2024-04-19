@@ -14,7 +14,7 @@ import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.benkitoucoders.ecommerce.services.inter.ProductService;
 import com.benkitoucoders.ecommerce.services.pdfs.DeliveredOrderStatement;
 import com.benkitoucoders.ecommerce.utils.OrderStatusIds;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +26,24 @@ import java.util.Map;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ClientOrderServiceImpl implements ClientOrderService {
     private final ClientOrderDao clientOrderDao;
     private final ClientOrderMapper clientOrderMapper;
     private final DeliveredOrderStatement deliveredOrderStatement;
     private final ProductService productService;
     private final ClientOrderDetailsService clientOrderDetailsService;
+
+    public ClientOrderServiceImpl(ClientOrderDao clientOrderDao,
+                                  ClientOrderMapper clientOrderMapper,
+                                  DeliveredOrderStatement deliveredOrderStatement,
+                                  ProductService productService,
+                                  @Qualifier("clientOrderDetailsServiceImpl") ClientOrderDetailsService clientOrderDetailsService) {
+        this.clientOrderDao = clientOrderDao;
+        this.clientOrderMapper = clientOrderMapper;
+        this.deliveredOrderStatement = deliveredOrderStatement;
+        this.productService = productService;
+        this.clientOrderDetailsService = clientOrderDetailsService;
+    }
 
     @Override
     public List<ClientOrderDto> getClientOrdersByQuery(Long orderId, Long clientId, Long orderStatusId, LocalDateTime dateCreation, LocalDateTime dateUpdate) {
@@ -49,9 +60,10 @@ public class ClientOrderServiceImpl implements ClientOrderService {
 
     @Override
     public ClientOrderDto addClientOrder(ClientOrderDto clientOrderDto) throws IOException {
+        double orderTotalPrice = 0;
         clientOrderDto.setId(null);
         clientOrderDto.setClientOrderStatusId(OrderStatusIds.IN_PROGRESS);
-        double totalClientOrderPrice = 0.0;
+
         // Map to store product IDs and their corresponding quantities
         Map<Long, Integer> productQuantities = new HashMap<>();
 
@@ -59,22 +71,19 @@ public class ClientOrderServiceImpl implements ClientOrderService {
         // Make sure if the product is out of stock
         for (ClientOrderDetailsDto clientOrderDetailsDto : clientOrderDto.getClientOrderDetailsDtos()) {
 
+            orderTotalPrice += (clientOrderDetailsDto.getPrice() * clientOrderDetailsDto.getQuantity());
+
+            clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
+            clientOrderDetailsDto.setPrice(clientOrderDetailsDto.getPrice() * clientOrderDetailsDto.getQuantity());
+            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+
 
             long productId = clientOrderDetailsDto.getProductId();
             int orderQuantity = clientOrderDetailsDto.getQuantity();
 
-
             // Fetch product and its quantity
             ProductDto productDto = productService.getProductById(productId);
             int availableQuantity = productDto.getQuantity();
-
-
-            clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
-            clientOrderDetailsDto.setPrice(productDto.getPrice());
-            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
-
-            totalClientOrderPrice += (productDto.getPrice() * clientOrderDetailsDto.getQuantity());
-
 
             // Check if there's enough stock for the product
             if (availableQuantity < orderQuantity) {
@@ -87,6 +96,11 @@ public class ClientOrderServiceImpl implements ClientOrderService {
             // No need to update the product in the database yet, we'll do it after validation
         }
 
+        // Validate if the ClientOrder price is equal to clientOrderDetails total ordered products price (like this we will sure that the order pricing is logic)
+        if (orderTotalPrice != savedClientOrderDto.getTotalPrice()) {
+            throw new NoStockExistException("Sorry, impossible to affect this order, order total price  and some of order details price are not the same");
+        }
+
         // Update the stock (decrease the quantity of the product)
         for (Map.Entry<Long, Integer> entry : productQuantities.entrySet()) {
             long productId = entry.getKey();
@@ -97,8 +111,6 @@ public class ClientOrderServiceImpl implements ClientOrderService {
             productService.updateProduct(productId, productDto);
         }
 
-        savedClientOrderDto.setTotalPrice(totalClientOrderPrice);
-        clientOrderDao.save(clientOrderMapper.dtoToModel(savedClientOrderDto));
         return savedClientOrderDto;
     }
 

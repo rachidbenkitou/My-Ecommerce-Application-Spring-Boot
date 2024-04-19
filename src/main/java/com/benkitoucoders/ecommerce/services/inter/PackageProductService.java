@@ -10,6 +10,7 @@ import java.util.List;
 public interface PackageProductService {
     public ResponseDto deleteProductFromPackage(Long packageId) throws EntityNotFoundException;
     public ResponseDto deletePackageProductById(Long id) throws EntityNotFoundException;
+    List<PackageProductDto> findPackageProductByPackageId(Long packageId) throws EntityNotFoundException;
     public PackageProductDto updatePackageProduct(Long id, PackageProductDto PackageProductDto) throws EntityNotFoundException;
     public PackageProductDto persistPackageProduct(PackageProductDto PackageProductDto) throws EntityNotFoundException ;
     public PackageProductDto findPackageProductById(Long id) throws EntityNotFoundException ;

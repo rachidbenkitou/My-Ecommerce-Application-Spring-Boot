@@ -12,7 +12,8 @@ import java.util.List;
 
 public interface ClientOrderDao extends JpaRepository<ClientOrder, Long>, JpaSpecificationExecutor<ClientOrder> {
     @Query("SELECT NEW com.benkitoucoders.ecommerce.dtos.ClientOrderDto(c.id, c.totalPrice, c.clientId," +
-            "cs.firstName, cs.lastName, cs.email, cs.phoneNumber, c.description, c.dateCreation, c.dateUpdate, c.clientOrderStatusId, os.name, os.color) " +
+            "cs.firstName, cs.lastName, cs.email, cs.phoneNumber, c.description, c.dateCreation," +
+            " c.dateUpdate, c.clientOrderStatusId, os.name, os.color) " +
             "FROM ClientOrder c " +
             "LEFT JOIN  Client cs ON c.clientId = cs.id " +
             "LEFT JOIN  OrderStatus os ON c.clientOrderStatusId = os.id " +
