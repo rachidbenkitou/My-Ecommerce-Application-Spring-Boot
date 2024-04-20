@@ -1,6 +1,7 @@
 package com.benkitoucoders.ecommerce.handlers;
 
 import com.benkitoucoders.ecommerce.exceptions.ApiBasedException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -31,5 +32,12 @@ public class ApplicationExceptionHandler {
                 .timeStamp(new Date())
                 .build();
         return new ResponseEntity<>(errorDetails, cx.getStatusCode());
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Object> handleTokenValidationException(RuntimeException ex, WebRequest request) {
+        Map<String, String> body = new HashMap<>();
+        body.put("message", ex.getMessage());
+        return new ResponseEntity<>(body, HttpStatus.UNAUTHORIZED);
     }
 }
