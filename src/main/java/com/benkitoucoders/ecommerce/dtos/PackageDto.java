@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -25,9 +26,9 @@ public class PackageDto {
     private Double comparePrice;
     private String packageImagePath;
     private String filePath;
-    private List<MultipartFile> packageImages;
+    private List<MultipartFile> packageImages = new ArrayList<>();
 
-    private List<ProductDto> productDtos;
+    private List<ProductDto> productDtos = new ArrayList<>();
 
 
     public PackageDto(Long id, String name, String description, LocalDateTime dateCreation, Long userCreation,

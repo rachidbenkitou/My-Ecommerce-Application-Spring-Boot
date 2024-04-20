@@ -71,11 +71,12 @@ public class ClientOrderServiceImpl implements ClientOrderService {
         // Make sure if the product is out of stock
         for (ClientOrderDetailsDto clientOrderDetailsDto : clientOrderDto.getClientOrderDetailsDtos()) {
 
-            orderTotalPrice += (clientOrderDetailsDto.getPrice() * clientOrderDetailsDto.getQuantity());
 
             clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
             clientOrderDetailsDto.setPrice(clientOrderDetailsDto.getPrice() * clientOrderDetailsDto.getQuantity());
-            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+            ClientOrderDetailsDto clientOrderDetailsDto1= clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+
+            orderTotalPrice += (clientOrderDetailsDto1.getPrice());
 
 
             long productId = clientOrderDetailsDto.getProductId();

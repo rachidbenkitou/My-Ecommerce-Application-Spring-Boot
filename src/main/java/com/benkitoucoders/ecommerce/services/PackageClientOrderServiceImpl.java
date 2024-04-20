@@ -48,6 +48,7 @@ public class PackageClientOrderServiceImpl implements ClientOrderService {
         clientOrderDto.setId(null);
         clientOrderDto.setClientOrderStatusId(OrderStatusIds.IN_PROGRESS);
 
+        double totalPrice = 0.0;
         // Map to store product IDs and their corresponding quantities
         Map<Long, Integer> productQuantities = new HashMap<>();
 
@@ -57,8 +58,10 @@ public class PackageClientOrderServiceImpl implements ClientOrderService {
 
 
             clientOrderDetailsDto.setClientOrderId(savedClientOrderDto.getId());
-            clientOrderDetailsDto.setPrice(clientOrderDetailsDto.getPrice() * clientOrderDetailsDto.getQuantity());
-            clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+            clientOrderDetailsDto.setPrice(clientOrderDetailsDto.getPrice());
+            ClientOrderDetailsDto clientOrderDetailsDto1 = clientOrderDetailsService.addClientOrderDetails(clientOrderDetailsDto);
+
+            totalPrice += clientOrderDetailsDto1.getPrice();
 
 
             long packageId = clientOrderDetailsDto.getPackageId();
@@ -83,6 +86,9 @@ public class PackageClientOrderServiceImpl implements ClientOrderService {
             // No need to update the product in the database yet, we'll do it after validation
         }
 
+        if (totalPrice != savedClientOrderDto.getTotalPrice()) {
+            throw new NoStockExistException("Sorry, impossible to affect this order, order total price  and some of order details price are not the same");
+        }
         // Update the stock (decrease the quantity of the product)
         for (Map.Entry<Long, Integer> entry : productQuantities.entrySet()) {
             long productId = entry.getKey();
