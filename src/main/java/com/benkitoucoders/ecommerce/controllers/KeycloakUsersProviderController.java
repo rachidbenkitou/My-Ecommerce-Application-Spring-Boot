@@ -78,15 +78,16 @@ public class KeycloakUsersProviderController {
     public ResponseEntity<LoginResponseDto> login(HttpServletRequest request) {
         String grantType = request.getParameter("grant_type");
         String clientId = request.getParameter("client_id");
+        String clientSecret = request.getParameter("client_secret");
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        return ResponseEntity.ok(securityUsersProviderService.login(grantType, clientId, username, password));
+
+        return ResponseEntity.ok(securityUsersProviderService.login(grantType, clientId, clientSecret, username, password));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<ResponseDto> logout(HttpServletRequest request) {
 
-        System.out.println("Benkitou Rachid Logout");
         String token = extractToken(request);
 
         String clientId = request.getParameter("client_id");
@@ -110,5 +111,11 @@ public class KeycloakUsersProviderController {
         String token = extractToken(request);
         ResponseDto response = securityUsersProviderService.assignRoleToUser(userId, roles, token);
         return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("forgotPassword/{username}")
+    public void forgotPassword(@PathVariable String username) {
+        securityUsersProviderService.forgotPassword(username);
+
     }
 }

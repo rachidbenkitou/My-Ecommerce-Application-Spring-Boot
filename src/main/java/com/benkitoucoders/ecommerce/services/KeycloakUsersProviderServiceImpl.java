@@ -13,7 +13,10 @@ import com.benkitoucoders.ecommerce.services.inter.SecurityRolesProviderService;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.RequiredArgsConstructor;
+import org.keycloak.admin.client.Keycloak;
+import org.keycloak.admin.client.resource.RealmResource;
+import org.keycloak.admin.client.resource.UsersResource;
+import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
@@ -23,13 +26,13 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 @Transactional
 @Service
-@RequiredArgsConstructor
 public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderService {
     @Value("${myKeycloak.users-endpoint}")
     private String usersEndpoint;
@@ -40,6 +43,14 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
 
     private final RestTemplate restTemplate;
     private final SecurityRolesProviderService securityRolesProviderService;
+    private final Keycloak keycloak;
+
+    KeycloakUsersProviderServiceImpl(Keycloak keycloak, RestTemplate restTemplate, SecurityRolesProviderService securityRolesProviderService) {
+        this.keycloak = keycloak;
+        this.restTemplate = restTemplate;
+        this.securityRolesProviderService = securityRolesProviderService;
+    }
+
 
     @Override
     public List<SecurityUserDto> getAllUsers(String accessToken) {
@@ -155,10 +166,11 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     }
 
     @Override
-    public LoginResponseDto login(String grantType, String clientId, String username, String password) {
+    public LoginResponseDto login(String grantType, String clientId, String clientSecret, String username, String password) {
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("grant_type", grantType);
         requestBody.add("client_id", clientId);
+        requestBody.add("client_secret", clientSecret);
         requestBody.add("username", username);
         requestBody.add("password", password);
 
@@ -258,5 +270,31 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
         return null; // Return null or consider throwing an exception if preferred_username cannot be extracted
     }
 
+    @Override
+    public UsersResource getUsersResource() {
+        RealmResource realm1 = keycloak.realm("master");
+        return realm1.users();
+    }
+
+    @Override
+    public void forgotPassword(String username) {
+
+        UsersResource usersResource = getUsersResource();
+
+        List<UserRepresentation> representationList = usersResource.searchByUsername(username, true);
+        UserRepresentation userRepresentation = representationList.stream().findFirst().orElse(null);
+
+
+        if (userRepresentation != null) {
+
+            List<String> actions = new ArrayList<>();
+            actions.add("UPDATE_PASSWORD");
+
+            usersResource.get(userRepresentation.getId()).executeActionsEmail(actions);
+            return;
+        }
+
+        throw new RuntimeException("Username Not Found");
+    }
 
 }
