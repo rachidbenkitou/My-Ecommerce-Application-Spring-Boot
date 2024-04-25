@@ -92,17 +92,9 @@ public class KeycloakUsersProviderController {
 
         String clientId = request.getParameter("client_id");
         String refreshToken = request.getParameter("refresh_token");
+        String client_secret= request.getParameter("client_secret");
 
-        System.out.println("Access Token");
-        System.out.println(token);
-
-        System.out.println("Refresh Token");
-        System.out.println(refreshToken);
-
-        System.out.println("Client ID");
-        System.out.println(clientId);
-
-        return ResponseEntity.ok(securityUsersProviderService.logout(token, clientId, refreshToken));
+        return ResponseEntity.ok(securityUsersProviderService.logout(token, clientId, refreshToken, client_secret));
 //        return null;
     }
 

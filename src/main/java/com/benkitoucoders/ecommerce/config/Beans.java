@@ -20,5 +20,4 @@ public class Beans {
                 .clientSecret("FJRMxrU81GGOhA4KlPHPLbOcSbbSaxPD")
                 .build();
     }
-
 }

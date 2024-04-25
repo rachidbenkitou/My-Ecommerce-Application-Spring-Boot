@@ -1,8 +1,8 @@
 
 package com.benkitoucoders.ecommerce.controllers;
 
-import com.benkitoucoders.ecommerce.services.inter.CategoryService;
 import com.benkitoucoders.ecommerce.dtos.CategoryDto;
+import com.benkitoucoders.ecommerce.services.inter.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/categories")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class CategoryController {
 
     private CategoryService categoryService;

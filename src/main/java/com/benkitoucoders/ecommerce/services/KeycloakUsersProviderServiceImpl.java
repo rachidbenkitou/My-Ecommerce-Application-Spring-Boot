@@ -43,6 +43,7 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
 
     private final RestTemplate restTemplate;
     private final SecurityRolesProviderService securityRolesProviderService;
+
     private final Keycloak keycloak;
 
     KeycloakUsersProviderServiceImpl(Keycloak keycloak, RestTemplate restTemplate, SecurityRolesProviderService securityRolesProviderService) {
@@ -188,16 +189,18 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     }
 
     @Override
-    public ResponseDto logout(String token, String clientId, String refreshToken) {
+    public ResponseDto logout(String token, String clientId, String refreshToken, String clientSecret) {
         MultiValueMap<String, String> requestBody = new LinkedMultiValueMap<>();
         requestBody.add("refresh_token", refreshToken);
         requestBody.add("client_id", clientId);
+        requestBody.add("client_secret", clientSecret);
 
         ResponseEntity<Map<String, Object>> response = makeHttpRequest(logoutEndpoint, HttpMethod.POST, requestBody);
 
         if (response.getStatusCode() != HttpStatus.NO_CONTENT) {
             throw new RuntimeException("Failed to logout from Keycloak");
         } else {
+
             return ResponseDto.builder()
                     .message("Logout has been successful!")
                     .build();

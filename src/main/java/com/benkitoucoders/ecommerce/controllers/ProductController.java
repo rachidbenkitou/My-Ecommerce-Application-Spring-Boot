@@ -19,6 +19,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+
 public class ProductController {
 
     private final ProductServiceImpl productService;
@@ -38,18 +40,6 @@ public class ProductController {
                                                                @RequestParam(defaultValue = "ASC") String sortDirection,
                                                                HttpServletRequest request) {
 
-
-        // Extracting the bearer token from the request headers
-        String bearerToken = request.getHeader("Authorization");
-
-        // Token extraction and manipulation can go here, if needed
-
-        // Example manipulation: Extracting token without "Bearer " prefix
-        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
-            String token = bearerToken.substring(7);
-            // Do something with the token if needed
-
-        }
 
         Sort sort = Sort.by(Sort.Direction.fromString(sortDirection), sortProperty);
         Pageable pageable = PageRequest.of(page, size, sort);

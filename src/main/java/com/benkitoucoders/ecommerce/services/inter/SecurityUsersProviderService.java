@@ -26,7 +26,7 @@ public interface SecurityUsersProviderService {
 
     LoginResponseDto login(String grantType, String clientId,String clientSecret, String username, String password);
 
-    ResponseDto logout(String token, String clientId, String refreshToken);
+    ResponseDto logout(String token, String clientId, String refreshToken, String client_secret);
 
     ResponseDto assignRoleToUser(String userId, List<Role> roles, String token);
 
