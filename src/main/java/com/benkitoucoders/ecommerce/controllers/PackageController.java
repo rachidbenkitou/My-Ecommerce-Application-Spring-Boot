@@ -16,7 +16,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/packages")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class PackageController {
 
     private final PackageService packageService;

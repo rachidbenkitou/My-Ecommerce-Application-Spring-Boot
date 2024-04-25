@@ -19,8 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
-
 public class ProductController {
 
     private final ProductServiceImpl productService;
@@ -60,7 +58,9 @@ public class ProductController {
 
     @GetMapping("/{productId}")
 //    @PreAuthorize("hasRole('client_user')")
-    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId) {
+    public ResponseEntity<ProductDto> getProductById(@PathVariable Long productId
+    ) {
+
         return ResponseEntity.ok().body(productService.getProductById(productId));
     }
 

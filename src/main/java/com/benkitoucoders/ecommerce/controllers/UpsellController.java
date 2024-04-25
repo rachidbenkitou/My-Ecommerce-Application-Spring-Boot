@@ -29,6 +29,7 @@ public class UpsellController {
         log.info("UpsellController::getAllUpsells Fetching Allupsells  {}.", PageRequest.of(page, size));
         return upsellService.getUpsells(PageRequest.of(page, size));
     }
+
     @GetMapping("/searchByProductId")
     public ResponseEntity<Page<UpsellDto>> searchByProductId(
             @RequestParam Long productId,
@@ -46,6 +47,7 @@ public class UpsellController {
         Page<UpsellDto> upsells = upsellService.searchUpsellsByPackageId(packageId, PageRequest.of(page, size));
         return new ResponseEntity<>(upsells, HttpStatus.OK);
     }
+
     @GetMapping("/{upsellId}")
     public ResponseEntity<UpsellDto> getUpsellById(@PathVariable Long upsellId) {
         log.info("UpsellController::getUpsellById Fetching upsell ById with id: {} .", upsellId);

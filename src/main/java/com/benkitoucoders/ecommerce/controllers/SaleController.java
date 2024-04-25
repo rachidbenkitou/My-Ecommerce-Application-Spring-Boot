@@ -13,7 +13,7 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/sales")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class SaleController {
 
     private final SaleService saleService;

@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientStatuses")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class ClientStatusController {
     private ClientStatusService clientStatusService;
     private ClientStatusMapper clientStatusMapper;

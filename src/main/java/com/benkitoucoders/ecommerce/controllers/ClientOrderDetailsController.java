@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientOrderDetails")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class ClientOrderDetailsController {
     private ClientOrderDetailsService clientOrderDetailsService;
 

@@ -19,6 +19,7 @@ import static com.benkitoucoders.ecommerce.utils.TokenManagement.extractToken;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("users")
+//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 public class KeycloakUsersProviderController {
     private final SecurityUsersProviderService securityUsersProviderService;
 
@@ -92,7 +93,7 @@ public class KeycloakUsersProviderController {
 
         String clientId = request.getParameter("client_id");
         String refreshToken = request.getParameter("refresh_token");
-        String client_secret= request.getParameter("client_secret");
+        String client_secret = request.getParameter("client_secret");
 
         return ResponseEntity.ok(securityUsersProviderService.logout(token, clientId, refreshToken, client_secret));
 //        return null;

@@ -15,7 +15,7 @@ import static com.benkitoucoders.ecommerce.utils.TokenManagement.extractToken;
 @RestController
 @RequestMapping("/clients")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class ClientController {
     private ClientService clientService;
 

@@ -4,6 +4,7 @@ import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.itextpdf.text.DocumentException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,7 +44,8 @@ public class ClientOrderController {
 
     @PostMapping
     public ResponseEntity<ClientOrderDto> addClientOrder(
-            @RequestBody ClientOrderDto clientOrderDto) throws IOException {
+            @RequestBody ClientOrderDto clientOrderDto,
+            HttpServletRequest request) throws IOException {
         return ResponseEntity.ok().body(clientOrderService.addClientOrder(clientOrderDto));
     }
 

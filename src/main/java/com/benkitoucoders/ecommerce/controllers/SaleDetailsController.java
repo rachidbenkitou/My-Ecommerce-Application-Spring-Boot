@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/saleDetails")
 @AllArgsConstructor
-@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:58213", allowCredentials = "true")
 public class SaleDetailsController {
 
     private SaleDetailsService saleDetailsService;
