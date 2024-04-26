@@ -12,7 +12,11 @@ import java.util.List;
 public interface ClientOrderService {
     List<ClientOrderDto> getClientOrdersByQuery(Long orderId, Long clientId, Long orderStatusId, LocalDateTime dateCreation, LocalDateTime dateUpdate) throws DocumentException, FileNotFoundException;
 
+    List<ClientOrderDto> getClientOrdersByClientIdLong(String username);
+
     ClientOrderDto getClientOrderById(Long id);
+
+    ClientOrderDto getClientOrderByClientId(Long username);
 
     ClientOrderDto addClientOrder(ClientOrderDto clientOrderDto) throws IOException;
 

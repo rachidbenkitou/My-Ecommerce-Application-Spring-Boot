@@ -1,10 +1,12 @@
 package com.benkitoucoders.ecommerce.services;
 
+import com.benkitoucoders.ecommerce.dao.ClientDao;
 import com.benkitoucoders.ecommerce.dao.ClientOrderDao;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDetailsDto;
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
 import com.benkitoucoders.ecommerce.dtos.ProductDto;
 import com.benkitoucoders.ecommerce.dtos.ResponseDto;
+import com.benkitoucoders.ecommerce.entities.Client;
 import com.benkitoucoders.ecommerce.entities.ClientOrder;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
 import com.benkitoucoders.ecommerce.exceptions.NoStockExistException;
@@ -28,17 +30,19 @@ import java.util.Map;
 @Transactional
 public class ClientOrderServiceImpl implements ClientOrderService {
     private final ClientOrderDao clientOrderDao;
+    private final ClientDao clientDao;
     private final ClientOrderMapper clientOrderMapper;
     private final DeliveredOrderStatement deliveredOrderStatement;
     private final ProductService productService;
     private final ClientOrderDetailsService clientOrderDetailsService;
 
     public ClientOrderServiceImpl(ClientOrderDao clientOrderDao,
-                                  ClientOrderMapper clientOrderMapper,
+                                  ClientDao clientDao, ClientOrderMapper clientOrderMapper,
                                   DeliveredOrderStatement deliveredOrderStatement,
                                   ProductService productService,
                                   @Qualifier("clientOrderDetailsServiceImpl") ClientOrderDetailsService clientOrderDetailsService) {
         this.clientOrderDao = clientOrderDao;
+        this.clientDao = clientDao;
         this.clientOrderMapper = clientOrderMapper;
         this.deliveredOrderStatement = deliveredOrderStatement;
         this.productService = productService;
@@ -51,13 +55,26 @@ public class ClientOrderServiceImpl implements ClientOrderService {
     }
 
     @Override
+    public List<ClientOrderDto> getClientOrdersByClientIdLong(String username) {
+        Client client=clientDao.findClientByEmail(username);
+        if (client==null) throw new EntityNotFoundException("The client with username: "+username+" is not found");
+        Long clientId= client.getId();
+        return clientOrderDao.findAllClientOrders(null, clientId, null, null, null);
+    }
+    @Override
     public ClientOrderDto getClientOrderById(Long id) {
         List<ClientOrderDto> clientOrderDtoList = clientOrderDao.findAllClientOrders(id, null, null, null, null);
         return clientOrderDtoList.stream()
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(String.format("The clientOrder with the id %d is not found.", id)));
     }
-
+    @Override
+    public ClientOrderDto getClientOrderByClientId(Long clientId) {
+        List<ClientOrderDto> clientOrderDtoList = clientOrderDao.findAllClientOrders(null, clientId, null, null, null);
+        return clientOrderDtoList.stream()
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(String.format("The clientOrder with the clientId %d is not found.", clientId)));
+    }
     @Override
     public ClientOrderDto addClientOrder(ClientOrderDto clientOrderDto) throws IOException {
         double orderTotalPrice = 0;

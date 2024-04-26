@@ -29,4 +29,6 @@ public interface ClientDao extends JpaRepository<Client, Long>, JpaSpecification
     );
 
     boolean existsByEmailAndPhoneNumber(String email, String phoneNumber);
+
+    Client findClientByEmail(String email);
 }

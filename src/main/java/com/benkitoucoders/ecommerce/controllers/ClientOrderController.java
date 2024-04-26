@@ -37,6 +37,11 @@ public class ClientOrderController {
                 dateUpdate));
     }
 
+    @GetMapping("byClient/{username}")
+    public ResponseEntity<List<ClientOrderDto>> getClientOrderByClientId(@PathVariable String username) {
+        return ResponseEntity.ok().body(clientOrderService.getClientOrdersByClientIdLong(username));
+    }
+
     @GetMapping("/{clientOrderId}")
     public ResponseEntity<ClientOrderDto> getClientOrderById(@PathVariable Long clientOrderId) {
         return ResponseEntity.ok().body(clientOrderService.getClientOrderById(clientOrderId));

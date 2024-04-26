@@ -2,13 +2,11 @@ package com.benkitoucoders.ecommerce.services;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.benkitoucoders.ecommerce.dtos.LoginResponseDto;
-import com.benkitoucoders.ecommerce.dtos.ResponseDto;
-import com.benkitoucoders.ecommerce.dtos.SecurityUserDto;
-import com.benkitoucoders.ecommerce.dtos.UserPasswordDto;
+import com.benkitoucoders.ecommerce.dtos.*;
 import com.benkitoucoders.ecommerce.entities.Role;
 import com.benkitoucoders.ecommerce.exceptions.EntityAlreadyExistsException;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.benkitoucoders.ecommerce.services.inter.ClientService;
 import com.benkitoucoders.ecommerce.services.inter.SecurityRolesProviderService;
 import com.benkitoucoders.ecommerce.services.inter.SecurityUsersProviderService;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -26,6 +24,7 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,10 +45,13 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
 
     private final Keycloak keycloak;
 
-    KeycloakUsersProviderServiceImpl(Keycloak keycloak, RestTemplate restTemplate, SecurityRolesProviderService securityRolesProviderService) {
+    private final ClientService clientService;
+
+    KeycloakUsersProviderServiceImpl(Keycloak keycloak, RestTemplate restTemplate, SecurityRolesProviderService securityRolesProviderService, ClientService clientService) {
         this.keycloak = keycloak;
         this.restTemplate = restTemplate;
         this.securityRolesProviderService = securityRolesProviderService;
+        this.clientService = clientService;
     }
 
 
@@ -103,12 +105,23 @@ public class KeycloakUsersProviderServiceImpl implements SecurityUsersProviderSe
     }
 
     @Override
-    public SecurityUserDto addUser(SecurityUserDto user, String token) {
+    public SecurityUserDto addUser(SecurityUserDto user, String token) throws IOException {
 
         isUserExistsByUsername(token);
         String userPassword = user.getPassword();
         user.setPassword(null);
         ResponseEntity<SecurityUserDto> response = makeKeycloakRequest(usersEndpoint, HttpMethod.POST, token, user, SecurityUserDto.class);
+        ClientDto clientDto = ClientDto
+                .builder()
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .address("Cas Oulfa")
+                .phoneNumber("0666666666")
+                .statusName("Active")
+                .statusId(1L)
+                .build();
+        clientService.addClient(clientDto, token);
         if (response.getStatusCode() == HttpStatus.CREATED) {
             SecurityUserDto savedSecurityUserDto = getUserByUsername(user.getUsername(), token);
 

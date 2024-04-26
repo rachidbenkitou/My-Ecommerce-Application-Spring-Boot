@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static com.benkitoucoders.ecommerce.utils.TokenManagement.extractToken;
@@ -42,7 +43,7 @@ public class KeycloakUsersProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addUser(@RequestBody SecurityUserDto user, HttpServletRequest request) {
+    public ResponseEntity<?> addUser(@RequestBody SecurityUserDto user, HttpServletRequest request) throws IOException {
         String token = extractToken(request);
         SecurityUserDto createdUser = securityUsersProviderService.addUser(user, token);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);

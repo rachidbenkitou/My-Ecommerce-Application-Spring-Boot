@@ -26,7 +26,7 @@ import java.util.Map;
 @Transactional
 @RequiredArgsConstructor
 public class PackageClientOrderServiceImpl implements ClientOrderService {
-    // TODO I KNOW THAT I DID NOT RESPECT STRATEGY PQTTERN, BUT I WILL BE IMPLEMENT IT LATER
+    // TODO I KNOW THAT I DID NOT RESPECT STRATEGY PATTERN, BUT I WILL BE IMPLEMENT IT LATER
     private final ClientOrderDao clientOrderDao;
     private final ClientOrderMapper clientOrderMapper;
     private final DeliveredOrderStatement deliveredOrderStatement;
@@ -40,7 +40,17 @@ public class PackageClientOrderServiceImpl implements ClientOrderService {
     }
 
     @Override
+    public List<ClientOrderDto> getClientOrdersByClientIdLong(String  username) {
+        return null;
+    }
+
+    @Override
     public ClientOrderDto getClientOrderById(Long id) {
+        return null;
+    }
+
+    @Override
+    public ClientOrderDto getClientOrderByClientId(Long clientId) {
         return null;
     }
 

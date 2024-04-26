@@ -7,6 +7,7 @@ import com.benkitoucoders.ecommerce.dtos.UserPasswordDto;
 import com.benkitoucoders.ecommerce.entities.Role;
 import org.keycloak.admin.client.resource.UsersResource;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface SecurityUsersProviderService {
@@ -18,7 +19,7 @@ public interface SecurityUsersProviderService {
 
     void setUpPasswordToUser(UserPasswordDto userPasswordDto, String userId, String token);
 
-    SecurityUserDto addUser(SecurityUserDto user, String token);
+    SecurityUserDto addUser(SecurityUserDto user, String token) throws IOException;
 
     ResponseDto updateUser(SecurityUserDto user, String id, String token);
 
