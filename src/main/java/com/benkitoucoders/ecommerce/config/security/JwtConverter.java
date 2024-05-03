@@ -47,11 +47,11 @@ public class JwtConverter implements Converter<Jwt, AbstractAuthenticationToken>
     @Override
     public AbstractAuthenticationToken convert(Jwt jwt) {
 
-//        // Validate token using Keycloak's token introspection endpoint
-//        boolean tokenValid = validateToken(jwt.getTokenValue());
-//        if (!tokenValid) {
-//            throw new ServiceException("Token is not valid");
-//        }
+        // Validate token using Keycloak's token introspection endpoint
+        boolean tokenValid = validateToken(jwt.getTokenValue());
+        if (!tokenValid) {
+            throw new ServiceException("Token is not valid");
+        }
         Collection<GrantedAuthority> authorities = Stream.concat(
                 jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
                 extractResourceRoles(jwt).stream()).collect(Collectors.toSet());

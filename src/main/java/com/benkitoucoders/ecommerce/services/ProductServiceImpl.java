@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -46,9 +47,11 @@ public class ProductServiceImpl implements ProductService {
     @Cacheable(value = "productsByQueryCache", key = "{#id, #name, #price, #quantity, #visibility, #categoryId, #pageable}")
     public List<ProductDto> getProductsByQuery(Long id, String name, Double price, Integer quantity, String visibility, Long categoryId, Pageable pageable) {
         try {
-            return productDao.getProductsByQuery(id, name, price, quantity, categoryId, visibility, pageable);
+            List<ProductDto> productDtoList = new ArrayList<>();
+            productDtoList = productDao.getProductsByQuery(id, name, price, quantity, categoryId, visibility, pageable);
+            return productDtoList;
         } catch (Exception e) {
-            throw new EntityServiceException("An error occurred while fetching the products.", e);
+            throw new EntityNotFoundException("An error occurred while fetching the products.");
         }
 
     }
