@@ -2,11 +2,13 @@ package com.benkitoucoders.ecommerce.controllers;
 
 import com.benkitoucoders.ecommerce.dtos.ClientOrderDto;
 import com.benkitoucoders.ecommerce.exceptions.EntityNotFoundException;
+import com.benkitoucoders.ecommerce.services.WebSocketService;
 import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.itextpdf.text.DocumentException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
@@ -20,10 +22,17 @@ public class ClientOrderController {
     private ClientOrderService clientOrderService;
     private ClientOrderService packageClientOrderService;
 
+    private final SimpMessagingTemplate messagingTemplate;
+
+    private final WebSocketService webSocketService;
+
+
     public ClientOrderController(@Qualifier("clientOrderServiceImpl") ClientOrderService clientOrderService,
-                                 @Qualifier("packageClientOrderServiceImpl") ClientOrderService packageClientOrderService) {
+                                 @Qualifier("packageClientOrderServiceImpl") ClientOrderService packageClientOrderService, SimpMessagingTemplate messagingTemplate, WebSocketService webSocketService) {
         this.clientOrderService = clientOrderService;
         this.packageClientOrderService = packageClientOrderService;
+        this.messagingTemplate = messagingTemplate;
+        this.webSocketService = webSocketService;
     }
 
     @GetMapping
@@ -51,7 +60,15 @@ public class ClientOrderController {
     public ResponseEntity<ClientOrderDto> addClientOrder(
             @RequestBody ClientOrderDto clientOrderDto,
             HttpServletRequest request) throws IOException {
-        return ResponseEntity.ok().body(clientOrderService.addClientOrder(clientOrderDto));
+
+        ClientOrderDto clientOrderDto1 = clientOrderService.addClientOrder(clientOrderDto);
+        // Send WebSocket message to notify frontEnd
+        notifyFrontEnd();
+        return ResponseEntity.ok().body(clientOrderDto1);
+    }
+
+    private void notifyFrontEnd() {
+        webSocketService.sendMessage("clientOrder");
     }
 
     @PostMapping("/package")
@@ -71,7 +88,7 @@ public class ClientOrderController {
     }
 
     @PatchMapping("/{clientOrderId}/accepted")
-    public ResponseEntity<ClientOrderDto> modifyClientOrderStatusToAccepted(@PathVariable Long clientOrderId) throws EntityNotFoundException {
+    public ResponseEntity<ClientOrderDto> modifyClientOrderStatusToAccepted(@PathVariable Long clientOrderId) throws EntityNotFoundException, DocumentException, FileNotFoundException {
         ClientOrderDto updatedClientOrder = clientOrderService.modifyClientOrderDtoStatusToAccepted(clientOrderId);
         return ResponseEntity.ok(updatedClientOrder);
     }

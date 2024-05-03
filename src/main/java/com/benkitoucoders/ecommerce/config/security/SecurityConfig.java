@@ -69,7 +69,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(HttpMethod.POST, "*/login").permitAll()
                                 .requestMatchers(HttpMethod.PUT, "*/forgotPassword/*").permitAll()
-                                .anyRequest().authenticated());
+                                .anyRequest().permitAll());
 
         http.sessionManagement(sess -> sess.sessionCreationPolicy(
                 SessionCreationPolicy.STATELESS));

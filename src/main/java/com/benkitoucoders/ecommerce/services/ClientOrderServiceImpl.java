@@ -16,10 +16,12 @@ import com.benkitoucoders.ecommerce.services.inter.ClientOrderService;
 import com.benkitoucoders.ecommerce.services.inter.ProductService;
 import com.benkitoucoders.ecommerce.services.pdfs.DeliveredOrderStatement;
 import com.benkitoucoders.ecommerce.utils.OrderStatusIds;
+import com.itextpdf.text.DocumentException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -156,18 +158,13 @@ public class ClientOrderServiceImpl implements ClientOrderService {
     }
 
     @Override
-    public ClientOrderDto modifyClientOrderDtoStatusToAccepted(Long clientOrderId) {
-        try {
+    public ClientOrderDto modifyClientOrderDtoStatusToAccepted(Long clientOrderId) throws DocumentException, FileNotFoundException {
             ClientOrder clientOrder = retrieveClientOrderById(clientOrderId);
             clientOrder.setClientOrderStatusId(OrderStatusIds.ACCEPTED);
             ClientOrderDto clientOrderDto = clientOrderMapper.modelToDto(clientOrderDao.save(clientOrder));
             deliveredOrderStatement.generateDeliveredOrderStatement(clientOrderId, clientOrderDto, null, true);
             return clientOrderDto;
 
-        } catch (Exception e) {
-            throw new RuntimeException("An error occurred while modifying clientOrder status to accepted.", e);
-
-        }
     }
 
     @Override

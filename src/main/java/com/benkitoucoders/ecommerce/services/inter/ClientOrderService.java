@@ -24,7 +24,7 @@ public interface ClientOrderService {
 
     ResponseDto deleteClientOrderById(Long id);
 
-    ClientOrderDto modifyClientOrderDtoStatusToAccepted(Long clientOrderId);
+    ClientOrderDto modifyClientOrderDtoStatusToAccepted(Long clientOrderId) throws DocumentException, FileNotFoundException;
 
     ClientOrderDto modifyClientOrderDtoStatusToReported(Long clientOrderId);
 
